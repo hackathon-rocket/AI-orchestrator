@@ -20,6 +20,7 @@ from pydantic_ai.exceptions import ModelHTTPError, UnexpectedModelBehavior, User
 from app.llm.base import BoundedProvider
 from app.llm.mock_provider import MockProvider
 from app.main import create_app
+from app.mapping.fingerprint import json_fingerprint
 from app.schemas.requests import AnalyzeRequest
 from app.schemas.responses import AnalyzeResponse, ErrorResponse, PrepareXlsxResponse
 from tests.conftest import TOKEN
@@ -118,6 +119,12 @@ def test_request_schema_precedence(client, settings):
     response = client.post("/v1/analyze", json=payload)
     expected = fixture("invoice.response.json")
     expected["meta"]["schema_source"] = "request"
+    registered = json.loads(
+        (settings.form_config_dir / "bbsk_11824_mapping.json").read_text(encoding="utf-8")
+    )
+    expected["meta"]["authoritative_constraints_fingerprint"] = json_fingerprint(
+        {"protected": {rule["destination"]: False for rule in registered["rules"]}}
+    )
     assert normalized_analysis(response) == expected
 
 

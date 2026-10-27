@@ -45,6 +45,29 @@ class Metadata(Model):
     duration_ms: float
     mapping_id: str | None = None
     schema_source: Literal["request", "configured", "none"] = "none"
+    mapping_version: str | None = Field(
+        default=None, description="Human-managed version declared by the resolved mapping, or null."
+    )
+    mapping_fingerprint: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        description=(
+            "SHA-256 of the validated effective mapping content; null when no form is supplied."
+        ),
+    )
+    form_schema_fingerprint: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        description="SHA-256 of the raw form schema actually resolved for this request, or null.",
+    )
+    authoritative_constraints_fingerprint: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        description=(
+            "SHA-256 of additional registered protections used for mapping destinations; "
+            "null when no external constraints beyond the mapping and selected schema apply."
+        ),
+    )
 
 
 class AnalyzeResponse(Model):

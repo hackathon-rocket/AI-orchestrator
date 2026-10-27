@@ -62,8 +62,10 @@ class AnalysisOrchestrator:
         config = None
         form = None
         schema_source = "none"
+        resolved = None
         if request.form:
-            config, form, schema_source = self.loader.resolve(request.form)
+            resolved = self.loader.resolve_with_metadata(request.form)
+            config, form, schema_source = resolved.config, resolved.form, resolved.schema_source
 
         event(request_id, "input", document_id=request.document_id, provider=self.provider.name)
         try:
@@ -127,5 +129,11 @@ class AnalysisOrchestrator:
                 duration_ms=duration_ms,
                 mapping_id=config.id if config else None,
                 schema_source=schema_source,
+                mapping_version=resolved.mapping_version if resolved else None,
+                mapping_fingerprint=resolved.mapping_fingerprint if resolved else None,
+                form_schema_fingerprint=resolved.form_schema_fingerprint if resolved else None,
+                authoritative_constraints_fingerprint=(
+                    resolved.authoritative_constraints_fingerprint if resolved else None
+                ),
             ),
         )

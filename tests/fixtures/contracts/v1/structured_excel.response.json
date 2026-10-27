@@ -337,6 +337,10 @@
     "request_id": "$dynamic.request_id",
     "duration_ms": 0,
     "mapping_id": null,
-    "schema_source": "none"
+    "schema_source": "none",
+    "mapping_version": null,
+    "mapping_fingerprint": null,
+    "form_schema_fingerprint": null,
+    "authoritative_constraints_fingerprint": null
   }
 }

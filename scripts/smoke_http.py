@@ -88,6 +88,11 @@ def main():
             assert row["suma_dotacia"]["value"] is None
             assert data["requires_review"] is True
             assert data["mapping_status"] == "mapped"
+            assert data["meta"]["mapping_version"] == "1.0"
+            assert data["meta"]["authoritative_constraints_fingerprint"] is None
+            for key in ("mapping_fingerprint", "form_schema_fingerprint"):
+                assert data["meta"][key].startswith("sha256:")
+                assert len(data["meta"][key]) == 71
             out = ROOT / "docs/examples"
             out.mkdir(parents=True, exist_ok=True)
             _write_json(out / "mock_response.json", data)

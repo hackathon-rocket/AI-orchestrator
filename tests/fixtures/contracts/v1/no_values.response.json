@@ -704,6 +704,10 @@
     "request_id": "$dynamic.request_id",
     "duration_ms": 0,
     "mapping_id": "bbsk_payment_only_test",
-    "schema_source": "configured"
+    "schema_source": "configured",
+    "mapping_version": null,
+    "mapping_fingerprint": "sha256:391e1904ed3e2bcff761ca33c911cc331af58fc6009268b19be759eb67ebfab7",
+    "form_schema_fingerprint": "sha256:5c03f9d4fbd257bf066d21e1829573e08a778596cc6827444090b78e2e9c4cc3",
+    "authoritative_constraints_fingerprint": "sha256:ea475d1194e26ee3df0aa9902521ced689790e0c7ab2b2605cae105f0bee9b7f"
   }
 }

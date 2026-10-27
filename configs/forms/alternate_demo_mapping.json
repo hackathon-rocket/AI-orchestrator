@@ -1,6 +1,7 @@
 {
   "id": "alternate_demo",
   "form_id": "alternate_demo",
+  "version": "1.0",
   "schema_file": "alternate_demo_schema.json",
   "rules": [
     {

@@ -703,6 +703,10 @@
     "request_id": "b9982a95-3beb-4696-a10d-d100473608a9",
     "duration_ms": 41.41,
     "mapping_id": "manager_v1",
-    "schema_source": "request"
+    "schema_source": "request",
+    "mapping_version": "1",
+    "mapping_fingerprint": "sha256:4e56a4ec7d80f2687176510de15903884cf47f473f98899dcc0a8a4a5307271f",
+    "form_schema_fingerprint": "sha256:da7cf1aa918a814e2fdc25d9a5038e69ae7fd1fcf0dd60840c46b9c6f70e4c52",
+    "authoritative_constraints_fingerprint": null
   }
 }

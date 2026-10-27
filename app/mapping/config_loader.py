@@ -1,9 +1,12 @@
 import json
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 from pydantic import model_validator
 
 from app.core.errors import ServiceError
+from app.mapping.fingerprint import json_fingerprint, mapping_fingerprint
 from app.mapping.form_parser import FormSchemaParser, ParsedForm
 from app.schemas.mapping import InlineMapping
 from app.schemas.requests import FormContext
@@ -35,6 +38,45 @@ class MappingConfig(InlineMapping):
         ):
             raise ValueError("Schema file must be a JSON basename")
         return self
+
+
+@dataclass(frozen=True)
+class ResolvedMapping:
+    config: InlineMapping
+    form: ParsedForm
+    schema_source: Literal["request", "configured"]
+    mapping_version: str | None
+    mapping_fingerprint: str
+    form_schema_fingerprint: str
+    authoritative_constraints_fingerprint: str | None = None
+
+    @classmethod
+    def create(
+        cls,
+        config: InlineMapping,
+        form: ParsedForm,
+        schema: dict,
+        schema_source: Literal["request", "configured"],
+        *,
+        authoritative_constraints: dict | None = None,
+    ) -> "ResolvedMapping":
+        try:
+            schema_fingerprint = json_fingerprint(schema)
+        except (TypeError, ValueError) as exc:
+            raise ServiceError(
+                "invalid_form_schema", "Schéma formulára nie je platný JSON."
+            ) from exc
+        return cls(
+            config=config,
+            form=form,
+            schema_source=schema_source,
+            mapping_version=config.version,
+            mapping_fingerprint=mapping_fingerprint(config),
+            form_schema_fingerprint=schema_fingerprint,
+            authoritative_constraints_fingerprint=(
+                json_fingerprint(authoritative_constraints) if authoritative_constraints else None
+            ),
+        )
 
 
 class ConfigLoader:
@@ -119,6 +161,11 @@ class ConfigLoader:
                 )
 
     def resolve(self, context: FormContext):
+        """Retain the existing tuple interface for mapping callers."""
+        resolved = self.resolve_with_metadata(context)
+        return resolved.config, resolved.form, resolved.schema_source
+
+    def resolve_with_metadata(self, context: FormContext) -> ResolvedMapping:
         if context.mapping is not None:
             config = context.mapping
             if config.id != context.mapping_id or config.form_id != context.id:
@@ -137,17 +184,35 @@ class ConfigLoader:
             )
             parsed = self.parser.parse(schema)
             self.validate(config, parsed, strict=True)
+            constraints: dict = {}
             for original in registered:
                 authoritative = self.parser.parse(self.schemas[original.id])
                 for rule in config.rules:
                     existing = authoritative.fields.get(rule.destination)
                     is_reserved = rule.destination in original.reserved
                     is_protected = existing is not None and not existing.editable
+                    # Hash only external decisions used by this request, not paths,
+                    # labels or protections already covered by the selected schema.
+                    reserved = constraints.setdefault("reserved", {})
+                    reserved[rule.destination] = (
+                        reserved.get(rule.destination, False) or is_reserved
+                    )
+                    if context.schema_ is not None or original.id != registered[0].id:
+                        protected = constraints.setdefault("protected", {})
+                        protected[rule.destination] = (
+                            protected.get(rule.destination, False) or is_protected
+                        )
                     if is_reserved or is_protected:
                         raise ServiceError(
                             "protected_mapping_destination", "Registrované ochrany nemožno obísť."
                         )
-            return config, parsed, "request" if context.schema_ is not None else "configured"
+            return ResolvedMapping.create(
+                config,
+                parsed,
+                schema,
+                "request" if context.schema_ is not None else "configured",
+                authoritative_constraints=constraints,
+            )
 
         config = self.configs.get(context.mapping_id)
         if config is None or config.form_id != context.id:
@@ -158,10 +223,18 @@ class ConfigLoader:
         schema = context.schema_ if supplied else self.schemas[context.mapping_id]
         parsed = self.parser.parse(schema)
         self.validate(config, parsed)
+        constraints = {}
         if supplied:
             authoritative = self.parser.parse(self.schemas[config.id])
             for rule in config.rules:
                 original = authoritative.fields[rule.destination]
+                constraints.setdefault("protected", {})[rule.destination] = not original.editable
                 if not original.editable:
                     parsed.fields[rule.destination].editable = False
-        return config, parsed, "request" if supplied else "configured"
+        return ResolvedMapping.create(
+            config,
+            parsed,
+            schema,
+            "request" if supplied else "configured",
+            authoritative_constraints=constraints,
+        )

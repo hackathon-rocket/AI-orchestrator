@@ -26,7 +26,7 @@ Each of these names has `<name>.request.json` and `<name>.response.json`:
 
 Successful responses replace only `meta.request_id` with `$dynamic.request_id` and `meta.duration_ms` with 0. Before normalization tests require a canonical UUID, matching response header, finite nonnegative duration, JSON Content-Type and Cache-Control:no-store. Error goldens normalize only `error.request_id` after the same header/UUID checks. Correlation-ID passthrough/replacement also has independent tests.
 
-Provider and model remain exact (`mock`). Evidence, amounts, dates, pages, tags, coordinates, statuses, reasons and warnings are never normalized. Full dictionary equality ignores object key ordering; array contents/order remain fixed for these fixture outputs. Consumer identity should be based on tags.
+Provider and model remain exact (`mock`). The mapping_version and all three fingerprints remain exact too: they are deterministic contract values, not dynamic metadata. Without a form all four are explicitly null; configured mappings declare version 1.0, while the inline no_values fixture has no declared version. Evidence, amounts, dates, pages, tags, coordinates, statuses, reasons and warnings are never normalized. Full dictionary equality ignores object key ordering; array contents/order remain fixed for these fixture outputs. Consumer identity should be based on tags.
 
 OpenAPI comparison excludes description/title/examples/example/summary/operationId annotations, not public fields that happen to have one of those names. Constraints, defaults, refs, required flags, enums, nullability and Bearer declarations remain compared.
 
@@ -35,3 +35,5 @@ OpenAPI comparison excludes description/title/examples/example/summary/operation
 The initial fixtures were authored once against the existing application, then inspected for expected business behavior. No generation code runs in the test suite. To intentionally update a contract, review the endpoint/model change and every semantic fixture diff independently; do not regenerate expected data as a test setup step. Existing docs/examples smoke outputs are demonstrations and are not these goldens.
 
 Run `uv run pytest tests/integration/test_api_contract_v1.py -q`. If the system temporary directory is unavailable on Windows, use `--basetemp work/contract-v1-target`. See `docs/api-contract.md` for all contract semantics and known integration limitations.
+
+The authoritative_constraints_fingerprint is null in the standard configured-schema and unregistered examples; no_values uses registered inline fallback and therefore also tracks external reserved constraints. Request-schema override behavior is checked explicitly in the contract test. The original mapping and raw-schema fingerprints retain their prior meanings.

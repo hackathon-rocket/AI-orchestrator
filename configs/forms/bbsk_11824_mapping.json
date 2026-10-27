@@ -1,6 +1,7 @@
 {
   "id": "bbsk_11824_default",
   "form_id": "bbsk_11824",
+  "version": "1.0",
   "schema_file": "bbsk_11824_schema.json",
   "document_types": [
     "invoice"

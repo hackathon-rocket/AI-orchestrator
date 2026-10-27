@@ -339,6 +339,10 @@
     "request_id": "$dynamic.request_id",
     "duration_ms": 0,
     "mapping_id": "bbsk_11824_default",
-    "schema_source": "configured"
+    "schema_source": "configured",
+    "mapping_version": "1.0",
+    "mapping_fingerprint": "sha256:ce4bdae723c8eb5e2f5222449fc5ccb47d1d8ac0968d8a57906ba8da3575f615",
+    "form_schema_fingerprint": "sha256:5c03f9d4fbd257bf066d21e1829573e08a778596cc6827444090b78e2e9c4cc3",
+    "authoritative_constraints_fingerprint": null
   }
 }

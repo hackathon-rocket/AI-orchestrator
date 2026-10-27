@@ -51,6 +51,15 @@ The analysis response also contains the server-computed `mapping_status`:
 
 Use this enum rather than parsing localized warnings or testing whether tables/fields arrays are nonempty. `status="completed"` means execution completed for all four outcomes; none is user confirmation. Zero amounts and safe `needs_review` suggestions count as mapped. The field is returned even when `include_unmapped=false`; configuration/provider failures retain the existing HTTP error envelope. Keep the enum in persisted analysis results if needed for the review workflow. Strict client schemas must accept the additive response field. This does not change Laravel's own document status model or require a new frontend wrapper.
 
+For persistence, retain `meta.mapping_id`, `meta.mapping_version`, `meta.mapping_fingerprint`, `meta.form_schema_fingerprint`, `meta.authoritative_constraints_fingerprint`, and `meta.schema_source` alongside the result. The API `meta.schema_version` remains `"1.0"`; it is not a form version.
+
+- `mapping_version` is the optional human-managed label of the effective mapping (bundled configurations start at `"1.0"`); inline null/omitted versions remain null.
+- `mapping_fingerprint` identifies actual validated mapping content, including its declared label and all rules/defaults, excluding the schema filename/location.
+- `form_schema_fingerprint` identifies the full selected raw schema, including request overrides or registered fallback.
+- `authoritative_constraints_fingerprint` identifies additional server-registered protected/reserved decisions for rule destinations. It is null when the mapping and selected schema already cover all dependencies (also for no form or wholly unregistered inline forms). Registered constraints are still enforced when a request supplies its own schema.
+
+The identifiers use `sha256:<64 lowercase hex>`. Formatting and object-key ordering do not affect them; array ordering does. Compare fingerprints when deciding whether configuration changed, even if a version label is unchanged. They describe the resolved configuration for mapped/unsupported/no-values outcomes, and are still returned with `include_unmapped=false`. All four are null without a form. Compare the entire identity set: changing a registered readonly restriction can remove a suggestion even with unchanged request schema and mapping fingerprints. Keep schemas/mappings in Laravel's own historical storage if required: the service cannot retrieve them by fingerprint and does not migrate or reanalyze saved results. These hashes do not replace authorization, human review, or recording relevant software/model versions. Strict response schemas must allow the four nullable identity metadata fields.
+
 Suggested status translation (owned by Laravel):
 
 | Internal state | React status / stage |

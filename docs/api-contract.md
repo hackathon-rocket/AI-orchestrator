@@ -1,6 +1,6 @@
 # API Contract v1.0
 
-This is the existing synchronous Laravel-to-service contract. Laravel owns application-user authorization, OCR, storage, queues, persistence and confirmation. React receives proposals through Laravel. The service extracts and validates facts and proposes mapped values; it does not write to eGrant. This document protects API v1 behavior, including the additive mapping_status outcome field.
+This is the existing synchronous Laravel-to-service contract. Laravel owns application-user authorization, OCR, storage, queues, persistence and confirmation. React receives proposals through Laravel. The service extracts and validates facts and proposes mapped values; it does not write to eGrant. This document protects API v1 behavior, including the additive mapping_status outcome field and mapping/schema identity metadata.
 
 ## 1. Endpoints and authentication
 
@@ -74,8 +74,8 @@ Formula strings are never executed; formula cells are not direct value evidence.
 A non-null form requires `id` and `mapping_id` (same identifier rules as `document_id`). `schema` and `mapping` default to null.
 
 - Without inline `mapping`, `mapping_id` must be registered for `id`. A supplied authoritative `schema` takes precedence over the configured schema. Configured target protections remain enforced. Metadata reports `schema_source="request"` for supplied schema, otherwise `"configured"`.
-- With inline `mapping`, its `id`/`form_id` must agree with the envelope. An unregistered form requires its schema; a registered form may reuse the configured schema. Rules are validated before provider execution and are never persisted. The existing optional mapping `version` is an opaque label; this API does not implement version negotiation/tracking.
-- Without a form, metadata has `mapping_id=null`, `schema_source="none"`, `fields=[]`, `tables=[]`, and a no-mapping warning. Extraction still runs.
+- With inline `mapping`, its `id`/`form_id` must agree with the envelope. An unregistered form requires its schema; a registered form may reuse the configured schema. Rules are validated before provider execution and are never persisted. The existing optional mapping `version` is a human-managed label, returned as `meta.mapping_version`; content is independently identified by fingerprints. There is no version negotiation or historical configuration retrieval.
+- Without a form, metadata has `mapping_id=null`, `mapping_version=null`, `mapping_fingerprint=null`, `form_schema_fingerprint=null`, `authoritative_constraints_fingerprint=null`, `schema_source="none"`, `fields=[]`, `tables=[]`, and a no-mapping warning. Extraction still runs.
 
 Inline mappings contain `id`, `form_id`, `document_types` (default invoice), `rules`, optional `version` and `reserved`. Each rule names an extraction `source` and target `destination`; optional fields are `value_map`, `required_currency` and `review_warning`. There are no request-supplied paths, executable expressions, provider settings or credentials. See [mapping rules](egrant-mapping.md). Laravel must authorize the administrator, tenant and authoritative schema before forwarding configuration.
 
@@ -158,7 +158,7 @@ Omitted extraction fields use the missing-value policy. In requests, nullable `f
 
 `options.include_unmapped=false` preserves the key `extracted_data` with value **null**. It does not remove or alter `mapping_status`, mapped suggestions, warnings, status, metadata or `requires_review`. True returns the richer extraction. Both behaviors have full golden fixtures.
 
-Metadata has exactly the existing properties:
+Metadata has the following properties (the three identity fields are an additive extension):
 
 | Property | Meaning |
 |---|---|
@@ -169,8 +169,43 @@ Metadata has exactly the existing properties:
 | `duration_ms` | Finite elapsed milliseconds; varies per request. |
 | `mapping_id` | Resolved mapping identifier or null without form. |
 | `schema_source` | `request`, `configured`, or `none`. |
+| `mapping_version` | String declared by the effective mapping, or null when undeclared/no form. Not the API or application version. |
+| `mapping_fingerprint` | `sha256:<64 lowercase hex>` of the effective validated mapping; null with no form. |
+| `form_schema_fingerprint` | Same SHA-256 format, identifying the effective raw form schema; null with no form. |
+| `authoritative_constraints_fingerprint` | Same format for additional registered constraints on rule destinations; null when no external constraints beyond the other identifiers apply. |
 
-Metadata is not proof that a particular fact is correct. There are no additional mapping-status or form-version metadata fields.
+Metadata is not proof that a particular fact is correct. `mapping_status` remains at the response top level. `schema_version="1.0"` still denotes the public API schema, not a BBSK form version. There is no inferred form-version label.
+
+### Mapping and form identity
+
+Fingerprints are generated after successful resolution and validation, where the loader has both the effective mapping and the selected raw schema. They are present with `mapped`, `unsupported_document_type`, and `no_values`, independently of `include_unmapped`. Configuration failures remain HTTP errors and never become completed responses just to return identifiers.
+
+Canonicalization uses Python JSON serialization with sorted object keys, compact separators, `ensure_ascii=false`, finite JSON numbers and UTF-8, followed by SHA-256. Source-file formatting, object-key insertion order and filesystem location do not affect identifiers. **Array order is significant**, including rules, reserved destinations, document types and form children. Actual string whitespace, value types and schema details remain part of the content; this is not a semantic equivalence engine or a cross-language RFC 8785 implementation.
+
+The mapping payload is the validated model's complete JSON serialization, including defaults, IDs, declared version, document types, rules, value maps, currency requirements, review warnings and reserved destinations. Only `MappingConfig.schema_file` is excluded: it locates a file but does not identify its contents. Configured and inline mappings with the same validated payload therefore have the same identifier. Absolute paths are never included.
+
+The form fingerprint covers the **raw schema selected for this request**, not merely parsed fields/tables. It follows configured schemas, request overrides, new inline schemas and permitted inline fallback to a registered schema. Ignored parser details still affect identity. Existing destination protections and validation remain enforced; hashing does not authorize a schema or mapping.
+
+### Additional authoritative constraints
+
+Request-supplied content can still inherit restrictions from server-registered configuration. `authoritative_constraints_fingerprint` identifies the **effective protection decisions consulted for rule destinations**, using the same canonical JSON/SHA-256 convention. It does not redefine either existing fingerprint and does not hash unrelated authoritative labels, filesystem paths or whole schemas a second time.
+
+| Resolution branch | Additional dependency |
+|---|---|
+| No form | None; all identity fields are null. |
+| Configured mapping + configured schema | None; mapping and selected schema fingerprints already cover the dependencies. |
+| Configured mapping + request schema | Registered schema's non-editable/protected decision for each rule destination. |
+| Inline mapping + request schema for a registered form | Registered reserved membership and schema protection decisions for each rule destination, across all registered mappings of the form. |
+| Inline mapping + registered-schema fallback | Registered reserved membership across all contributors, plus protections from other registered schemas. The selected fallback schema's protections are already covered by form_schema_fingerprint. |
+| Inline mapping for a wholly unregistered form | None; effective mapping and request schema already identify all configuration inputs. |
+
+The projection uses destination-keyed `protected` and/or `reserved` booleans. Decisions from multiple contributors combine with logical OR; object keys sort canonically, so contributor order, duplicates and filesystem order do not affect this identifier. Mapping/form array ordering retains its existing meaning in their original fingerprints. A relevant readonly/parent protection change alters this projection; changes to labels or other details that do not affect these checks need not alter it.
+
+Null means no additional authoritative dependency, not permission to bypass checks. A non-null hash can describe all-false decisions: those independent server constraints were still consulted. Existing inline authorization/protected-destination failures remain HTTP errors, without a completed result. For configured mapping with a request schema, registered protection may remove a suggested cell while both existing fingerprints remain unchanged; the new fingerprint changes, distinguishing the complete configuration identity. Persist and compare the whole identity set.
+
+The bundled BBSK and alternate demo mappings declare version `"1.0"`. Their rules and form schemas are unchanged. Inline mapping versions may be omitted or null. Labels are human-managed; the service never increments or derives them from a date, commit, server release or digest. A version-label change itself changes the mapping fingerprint. A rule/schema change can change a fingerprint even when an operator forgets to update the label: use fingerprints to detect content differences.
+
+Fingerprints are content identifiers, not authentication, signatures, proof of correctness, or a hash of the whole execution environment. They do not include OCR, extraction results or provider output. Store configuration snapshots and relevant software versions upstream if exact historical reproduction is required. This service adds no persistence, migration, automatic reanalysis or historical lookup, and does not log full mapping/schema payloads.
 
 ## 9. Limits and error envelope
 
@@ -228,7 +263,7 @@ The deterministic fixture [prepare_xlsx.input.json](../tests/fixtures/contracts/
 
 Contract tests protect the paths/methods, request/response references, required fields, types, nullability, enum values, defaults, constraints, extra-property policy and security declarations. Editorial OpenAPI descriptions, examples, titles, summaries and operation IDs are excluded from the structural fixture. A property name is never excluded merely because it matches an editorial keyword.
 
-API paths stay `/v1/...`; metadata stays schema version `1.0`. `mapping_status` is an additive required response field; previous properties, routes, authentication, value serialization, validation and mapping rules retain their behavior. Clients that ignore unknown JSON properties remain compatible. Strict response validators or generated clients must add this four-value enum. No request field or metadata field is added. Contract fixtures are reviewed expectations, not permission for silent breaking changes. Future changes require explicit compatibility review of existing consumers and appropriate versioning; this task adds no version negotiation mechanism.
+API paths stay `/v1/...`; metadata stays schema version `1.0`. `mapping_status` is an additive required response field; previous properties, routes, authentication, value serialization, validation and mapping rules retain their behavior. Clients that ignore unknown JSON properties remain compatible. Strict response validators or generated clients must add this four-value enum. No request field is added. The nullable metadata properties `mapping_version`, `mapping_fingerprint`, `form_schema_fingerprint`, and `authoritative_constraints_fingerprint` are also additive; strict client schemas must accept them. Existing metadata names and schema_version remain unchanged. Contract fixtures are reviewed expectations, not permission for silent breaking changes. Future changes require explicit compatibility review of existing consumers and appropriate versioning; this task adds no version negotiation mechanism.
 
 ## 13. Contract fixtures and tests
 

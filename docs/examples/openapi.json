@@ -1239,6 +1239,57 @@
             ],
             "title": "Schema Source",
             "default": "none"
+          },
+          "mapping_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mapping Version",
+            "description": "Human-managed version declared by the resolved mapping, or null."
+          },
+          "mapping_fingerprint": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mapping Fingerprint",
+            "description": "SHA-256 of the validated effective mapping content; null when no form is supplied."
+          },
+          "form_schema_fingerprint": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Form Schema Fingerprint",
+            "description": "SHA-256 of the raw form schema actually resolved for this request, or null."
+          },
+          "authoritative_constraints_fingerprint": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authoritative Constraints Fingerprint",
+            "description": "SHA-256 of additional registered protections used for mapping destinations; null when no external constraints beyond the mapping and selected schema apply."
           }
         },
         "additionalProperties": false,
