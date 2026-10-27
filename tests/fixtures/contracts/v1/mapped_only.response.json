@@ -1,0 +1,210 @@
+{
+  "document_id": "synthetic-clean-invoice",
+  "status": "completed",
+  "document_type": "invoice",
+  "fields": [],
+  "tables": [
+    {
+      "tag": "rozpocet.zoznamuctovnychdokladov",
+      "label": "Zoznam učtovných dokladov",
+      "columns": [
+        {
+          "tag": "c_dokladu",
+          "label": "Číslo účtovného dokladu",
+          "type": "string"
+        },
+        {
+          "tag": "suma_doklad",
+          "label": "Suma na účt. doklade",
+          "type": "currency"
+        },
+        {
+          "tag": "datum",
+          "label": "Dátum dodania/ služieb",
+          "type": "date"
+        },
+        {
+          "tag": "datum_1",
+          "label": "Dátum úhrady",
+          "type": "date"
+        },
+        {
+          "tag": "nazov_vydavku",
+          "label": "Názov výdavku",
+          "type": "string"
+        },
+        {
+          "tag": "uhrada",
+          "label": "Spôsob úhrady",
+          "type": "string"
+        },
+        {
+          "tag": "typ",
+          "label": "Typ účt. dokladu",
+          "type": "string"
+        },
+        {
+          "tag": "suma_dotacia",
+          "label": "Suma z dotácie",
+          "type": "currency"
+        },
+        {
+          "tag": "druh",
+          "label": "Druh výdavku",
+          "type": "string"
+        },
+        {
+          "tag": "p_c",
+          "label": "Por. č.",
+          "type": "number"
+        }
+      ],
+      "rows": [
+        {
+          "c_dokladu": {
+            "tag": "c_dokladu",
+            "label": "Číslo účtovného dokladu",
+            "type": "string",
+            "value": "FA-2026-001",
+            "confidence": 0.8,
+            "evidence": "FAKTÚRA č. FA-2026-001",
+            "page": 3,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "suma_doklad": {
+            "tag": "suma_doklad",
+            "label": "Suma na účt. doklade",
+            "type": "currency",
+            "value": 1230.0,
+            "confidence": 0.8,
+            "evidence": "Suma spolu: 1 230,00 EUR",
+            "page": 3,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "datum": {
+            "tag": "datum",
+            "label": "Dátum dodania/ služieb",
+            "type": "date",
+            "value": "2026-09-30",
+            "confidence": 0.8,
+            "evidence": "Dátum dodania: 30.09.2026",
+            "page": 3,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "datum_1": {
+            "tag": "datum_1",
+            "label": "Dátum úhrady",
+            "type": "date",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "nazov_vydavku": {
+            "tag": "nazov_vydavku",
+            "label": "Názov výdavku",
+            "type": "string",
+            "value": "Tlač informačných materiálov",
+            "confidence": 0.8,
+            "evidence": "Predmet fakturácie: Tlač informačných materiálov",
+            "page": 3,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "uhrada": {
+            "tag": "uhrada",
+            "label": "Spôsob úhrady",
+            "type": "string",
+            "value": "prevodom",
+            "confidence": 0.8,
+            "evidence": "Spôsob úhrady: prevodom",
+            "page": 3,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "typ": {
+            "tag": "typ",
+            "label": "Typ účt. dokladu",
+            "type": "string",
+            "value": "FA",
+            "confidence": 0.8,
+            "evidence": "FAKTÚRA č. FA-2026-001",
+            "page": 3,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "suma_dotacia": {
+            "tag": "suma_dotacia",
+            "label": "Suma z dotácie",
+            "type": "currency",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "druh": {
+            "tag": "druh",
+            "label": "Druh výdavku",
+            "type": "string",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "p_c": {
+            "tag": "p_c",
+            "label": "Por. č.",
+            "type": "number",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          }
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    "dátum úhrady: údaj sa v dodanom obsahu nenašiel alebo nebol overený.",
+    "Výsledok je návrh. Pred použitím skontrolujte údaje a pôvodný dokument.",
+    "Povinné pole Dátum úhrady ostáva prázdne.",
+    "Názov výdavku je opis z dokladu; súlad so zmluvou musí posúdiť používateľ.",
+    "Pole Suma z dotácie musí doplniť alebo potvrdiť používateľ.",
+    "Pole Druh výdavku musí doplniť alebo potvrdiť používateľ.",
+    "Pole Por. č. musí doplniť alebo potvrdiť používateľ.",
+    "Pole Účtovný doklad musí doplniť alebo potvrdiť používateľ.",
+    "Pole Zakúpený tovar musí doplniť alebo potvrdiť používateľ."
+  ],
+  "requires_review": true,
+  "extracted_data": null,
+  "meta": {
+    "schema_version": "1.0",
+    "provider": "mock",
+    "model": "mock",
+    "request_id": "$dynamic.request_id",
+    "duration_ms": 0,
+    "mapping_id": "bbsk_11824_default",
+    "schema_source": "configured"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "document_id": "synthetic-receipt",
+  "content": {
+    "language": "sk",
+    "pages": [
+      {
+        "page": 3,
+        "text": "POKLADNIČNÝ DOKLAD č. B-001\nSuma spolu: 12,30 EUR\nMena: EUR\nSpôsob úhrady: v hotovosti"
+      }
+    ],
+    "sheets": []
+  },
+  "form": {
+    "id": "bbsk_11824",
+    "schema": null,
+    "mapping_id": "bbsk_11824_default"
+  },
+  "options": {
+    "include_unmapped": true
+  }
+}

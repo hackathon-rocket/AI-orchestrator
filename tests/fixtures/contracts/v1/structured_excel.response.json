@@ -1,0 +1,341 @@
+{
+  "document_id": "synthetic-excel",
+  "status": "completed",
+  "document_type": "unknown",
+  "fields": [],
+  "tables": [],
+  "warnings": [
+    "Typ dokumentu [classification_missing]: Model neposkytol klasifikáciu dokumentu.",
+    "Typ dokumentu nebol spoľahlivo určený.",
+    "total_gross: mena chýba alebo obsahuje rozporné údaje; skontrolujte originál.",
+    "Výsledok je návrh. Pred použitím skontrolujte údaje a pôvodný dokument.",
+    "Cieľový formulár nebol zadaný; údaje nie sú mapované."
+  ],
+  "requires_review": true,
+  "extracted_data": {
+    "document_type": "unknown",
+    "classification": {
+      "value": null,
+      "status": "not_found",
+      "evidence": null,
+      "confidence": 0.0,
+      "source_kind": "document",
+      "validation_reasons": [
+        "classification_missing"
+      ],
+      "currency": null
+    },
+    "fields": {
+      "invoice_number": {
+        "value": "XLS-001",
+        "status": "verified",
+        "evidence": {
+          "page": null,
+          "quote": "XLS-001",
+          "locator": {
+            "sheet": "Doklad",
+            "cell": "B1",
+            "context_cells": [
+              "A1"
+            ]
+          }
+        },
+        "confidence": 0.8,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "receipt_number": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "contract_number": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "supplier_name": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "supplier_ico": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "supplier_dic": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "supplier_vat_id": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "customer_name": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "customer_ico": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "customer_dic": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "customer_vat_id": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "issue_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "due_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "delivery_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "payment_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "total_net": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "total_vat": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "total_gross": {
+        "value": "120.50",
+        "status": "needs_review",
+        "evidence": {
+          "page": null,
+          "quote": "120.5",
+          "locator": {
+            "sheet": "Doklad",
+            "cell": "B2",
+            "context_cells": [
+              "A2"
+            ]
+          }
+        },
+        "confidence": 0.5,
+        "source_kind": "document",
+        "validation_reasons": [
+          "currency_missing"
+        ],
+        "currency": {
+          "value": null,
+          "status": "not_found",
+          "evidence": [],
+          "reasons": [
+            "currency_missing"
+          ]
+        }
+      },
+      "paid_amount": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "currency": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "iban": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "payment_method": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "expense_description": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "contract_subject": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "contract_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "contract_amount": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "statement_period_start": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "statement_period_end": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "opening_balance": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "closing_balance": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      }
+    },
+    "line_items": [],
+    "transactions": []
+  },
+  "meta": {
+    "schema_version": "1.0",
+    "provider": "mock",
+    "model": "mock",
+    "request_id": "$dynamic.request_id",
+    "duration_ms": 0,
+    "mapping_id": null,
+    "schema_source": "none"
+  }
+}

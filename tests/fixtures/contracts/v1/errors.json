@@ -1,0 +1,52 @@
+{
+  "auth_missing": {
+    "status": 401,
+    "body": {
+      "error": {
+        "code": "auth_missing",
+        "message": "Vyžaduje sa autentifikácia služby.",
+        "request_id": "$dynamic.request_id"
+      }
+    }
+  },
+  "auth_invalid": {
+    "status": 401,
+    "body": {
+      "error": {
+        "code": "auth_invalid",
+        "message": "Neplatná autentifikácia služby.",
+        "request_id": "$dynamic.request_id"
+      }
+    }
+  },
+  "invalid_request": {
+    "status": 422,
+    "body": {
+      "error": {
+        "code": "invalid_request",
+        "message": "Požiadavka má neplatný formát.",
+        "request_id": "$dynamic.request_id"
+      }
+    }
+  },
+  "unsupported_media_type": {
+    "status": 415,
+    "body": {
+      "error": {
+        "code": "unsupported_media_type",
+        "message": "Nepodporovaný typ obsahu.",
+        "request_id": "$dynamic.request_id"
+      }
+    }
+  },
+  "unknown_mapping": {
+    "status": 422,
+    "body": {
+      "error": {
+        "code": "unknown_mapping",
+        "message": "Formulár alebo mapovanie nie je nakonfigurované.",
+        "request_id": "$dynamic.request_id"
+      }
+    }
+  }
+}

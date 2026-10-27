@@ -1,0 +1,1364 @@
+{
+  "paths": {
+    "/health": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadinessResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadinessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/version": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyze": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyzeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "408": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/prepare-xlsx": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrepareXlsxResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "408": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisOptions": {
+        "properties": {
+          "include_unmapped": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "AnalyzeRequest": {
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "content": {
+            "$ref": "#/components/schemas/Content"
+          },
+          "form": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FormContext"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "options": {
+            "$ref": "#/components/schemas/AnalysisOptions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "document_id",
+          "content"
+        ]
+      },
+      "AnalyzeResponse": {
+        "properties": {
+          "document_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "const": "completed",
+            "default": "completed"
+          },
+          "document_type": {
+            "type": "string",
+            "enum": [
+              "invoice",
+              "receipt",
+              "contract",
+              "bank_statement",
+              "unknown"
+            ]
+          },
+          "fields": {
+            "items": {
+              "$ref": "#/components/schemas/ExtractedField"
+            },
+            "type": "array"
+          },
+          "tables": {
+            "items": {
+              "$ref": "#/components/schemas/ExtractedTable"
+            },
+            "type": "array"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "requires_review": {
+            "type": "boolean",
+            "const": true,
+            "default": true
+          },
+          "extracted_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExtractionData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "document_id",
+          "document_type",
+          "fields",
+          "tables",
+          "warnings",
+          "meta"
+        ]
+      },
+      "Cell": {
+        "properties": {
+          "coordinate": {
+            "type": "string",
+            "pattern": "^[A-Z]{1,3}[1-9][0-9]{0,6}$"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "formula": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 10000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "header_cells": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 8
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "coordinate",
+          "value"
+        ]
+      },
+      "CellLocator": {
+        "properties": {
+          "sheet": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "cell": {
+            "type": "string",
+            "pattern": "^[A-Z]{1,3}[1-9][0-9]{0,6}$"
+          },
+          "context_cells": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 8
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "sheet",
+          "cell"
+        ]
+      },
+      "Content": {
+        "properties": {
+          "language": {
+            "type": "string",
+            "maxLength": 50,
+            "default": "sk"
+          },
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/Page"
+            },
+            "type": "array",
+            "maxItems": 100
+          },
+          "sheets": {
+            "items": {
+              "$ref": "#/components/schemas/Sheet"
+            },
+            "type": "array",
+            "maxItems": 20
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "CurrencyResolution": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "needs_review",
+              "not_found"
+            ],
+            "default": "not_found"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "maxItems": 100
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "request_id"
+        ]
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "error"
+        ]
+      },
+      "Evidence": {
+        "properties": {
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1
+          },
+          "locator": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CellLocator"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "quote"
+        ]
+      },
+      "ExtractedField": {
+        "properties": {
+          "tag": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "string",
+              "number",
+              "currency",
+              "date",
+              "ico",
+              "dic",
+              "iban"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "needs_review",
+              "not_found"
+            ],
+            "default": "not_found"
+          },
+          "validation_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "source_locator": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CellLocator"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tag",
+          "label",
+          "type",
+          "value",
+          "confidence"
+        ]
+      },
+      "ExtractedTable": {
+        "properties": {
+          "tag": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/TableColumn"
+            },
+            "type": "array"
+          },
+          "rows": {
+            "items": {
+              "additionalProperties": {
+                "$ref": "#/components/schemas/ExtractedField"
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tag",
+          "label",
+          "columns",
+          "rows"
+        ]
+      },
+      "ExtractionData": {
+        "properties": {
+          "document_type": {
+            "type": "string",
+            "enum": [
+              "invoice",
+              "receipt",
+              "contract",
+              "bank_statement",
+              "unknown"
+            ],
+            "default": "unknown"
+          },
+          "classification": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/UniversalFields"
+          },
+          "line_items": {
+            "items": {
+              "$ref": "#/components/schemas/LineItem"
+            },
+            "type": "array",
+            "maxItems": 200
+          },
+          "transactions": {
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            },
+            "type": "array",
+            "maxItems": 200
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "Fact": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "needs_review",
+              "not_found"
+            ],
+            "default": "not_found"
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Evidence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "default": 0
+          },
+          "source_kind": {
+            "type": "string",
+            "enum": [
+              "document",
+              "calculated"
+            ],
+            "default": "document"
+          },
+          "validation_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CurrencyResolution"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "FormContext": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "schema": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mapping_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "mapping": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InlineMapping"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "mapping_id"
+        ]
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "default": "ok"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "InlineMapping": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "form_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "document_types": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "invoice",
+                "receipt",
+                "contract",
+                "bank_statement"
+              ]
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 1
+          },
+          "rules": {
+            "items": {
+              "$ref": "#/components/schemas/MappingRule"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "minItems": 1
+          },
+          "reserved": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 200
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "form_id",
+          "rules"
+        ]
+      },
+      "LineItem": {
+        "properties": {
+          "description": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "unit_price": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "net": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "vat": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "gross": {
+            "$ref": "#/components/schemas/Fact"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "MappingRule": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_]+(?:\\.[A-Za-z0-9_]+)*$"
+          },
+          "value_map": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object",
+                "maxProperties": 200
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "required_currency": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "review_warning": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source",
+          "destination"
+        ]
+      },
+      "Metadata": {
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "1.0",
+            "default": "1.0"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "duration_ms": {
+            "type": "number"
+          },
+          "mapping_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "schema_source": {
+            "type": "string",
+            "enum": [
+              "request",
+              "configured",
+              "none"
+            ],
+            "default": "none"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider",
+          "model",
+          "request_id",
+          "duration_ms"
+        ]
+      },
+      "Page": {
+        "properties": {
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100000.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 200000
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ]
+      },
+      "PrepareXlsxResponse": {
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/Content"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "content"
+        ]
+      },
+      "ReadinessResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "not_ready"
+            ]
+          },
+          "checks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "checks"
+        ]
+      },
+      "Sheet": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/SheetRow"
+            },
+            "type": "array",
+            "maxItems": 5000
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "rows"
+        ]
+      },
+      "SheetRow": {
+        "properties": {
+          "row": {
+            "type": "integer",
+            "maximum": 1048576.0,
+            "minimum": 1.0
+          },
+          "cells": {
+            "items": {
+              "$ref": "#/components/schemas/Cell"
+            },
+            "type": "array",
+            "maxItems": 1000
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "row",
+          "cells"
+        ]
+      },
+      "TableColumn": {
+        "properties": {
+          "tag": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "string",
+              "number",
+              "currency",
+              "date",
+              "ico",
+              "dic",
+              "iban"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tag",
+          "label",
+          "type"
+        ]
+      },
+      "Transaction": {
+        "properties": {
+          "date": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "description": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "reference": {
+            "$ref": "#/components/schemas/Fact"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "UniversalFields": {
+        "properties": {
+          "invoice_number": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "receipt_number": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "contract_number": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "supplier_name": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "supplier_ico": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "supplier_dic": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "supplier_vat_id": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "customer_name": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "customer_ico": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "customer_dic": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "customer_vat_id": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "issue_date": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "due_date": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "delivery_date": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "payment_date": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "total_net": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "total_vat": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "total_gross": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "paid_amount": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "iban": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "payment_method": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "expense_description": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "contract_subject": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "contract_date": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "contract_amount": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "statement_period_start": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "statement_period_end": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "opening_balance": {
+            "$ref": "#/components/schemas/Fact"
+          },
+          "closing_balance": {
+            "$ref": "#/components/schemas/Fact"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "VersionResponse": {
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schema_version": {
+            "type": "string",
+            "const": "1.0",
+            "default": "1.0"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "sheet": "Doklad",
+  "rows": [
+    [
+      "FAKTÚRA č. XLS-1"
+    ],
+    [
+      "Číslo faktúry",
+      "Suma spolu",
+      "Mena"
+    ],
+    [
+      "XLS-1",
+      123,
+      "EUR"
+    ],
+    [
+      "Formula",
+      "=1+1"
+    ]
+  ]
+}
