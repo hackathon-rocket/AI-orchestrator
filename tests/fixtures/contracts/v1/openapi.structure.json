@@ -386,6 +386,15 @@
           },
           "meta": {
             "$ref": "#/components/schemas/Metadata"
+          },
+          "mapping_status": {
+            "enum": [
+              "mapped",
+              "no_form",
+              "unsupported_document_type",
+              "no_values"
+            ],
+            "type": "string"
           }
         },
         "additionalProperties": false,
@@ -393,6 +402,7 @@
         "required": [
           "document_id",
           "document_type",
+          "mapping_status",
           "fields",
           "tables",
           "warnings",

@@ -2,6 +2,7 @@
   "document_id": "synthetic-unknown",
   "status": "completed",
   "document_type": "unknown",
+  "mapping_status": "unsupported_document_type",
   "fields": [],
   "tables": [],
   "warnings": [

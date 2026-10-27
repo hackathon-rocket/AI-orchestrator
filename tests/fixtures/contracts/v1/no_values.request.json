@@ -1,0 +1,33 @@
+{
+  "document_id": "synthetic-clean-invoice",
+  "content": {
+    "language": "sk",
+    "pages": [
+      {
+        "page": 3,
+        "text": "FAKTÚRA č. FA-2026-001\nDodávateľ: Ukážkový dodávateľ s.r.o.\nIČO dodávateľa: 12 345 679\nDIČ dodávateľa: 2021234567\nIČ DPH dodávateľa: SK2021234567\nOdberateľ: Ukážkové združenie\nDátum vystavenia: 01.10.2026\nDátum splatnosti: 15.10.2026\nDátum dodania: 30.09.2026\nPredmet fakturácie: Tlač informačných materiálov\nSpôsob úhrady: prevodom\nZáklad DPH: 1 000,00 EUR\nDPH spolu: 230,00 EUR\nSuma spolu: 1 230,00 EUR\nMena: EUR\nPoložka: Letáky | Množstvo: 100 | Jednotka: ks | Jednotková cena: 4,00 | Bez DPH: 400,00 | DPH: 92,00 | S DPH: 492,00\nPoložka: Plagáty | Množstvo: 100 | Jednotka: ks | Jednotková cena: 6,00 | Bez DPH: 600,00 | DPH: 138,00 | S DPH: 738,00"
+      }
+    ],
+    "sheets": []
+  },
+  "form": {
+    "id": "bbsk_11824",
+    "mapping_id": "bbsk_payment_only_test",
+    "mapping": {
+      "id": "bbsk_payment_only_test",
+      "form_id": "bbsk_11824",
+      "document_types": [
+        "invoice"
+      ],
+      "rules": [
+        {
+          "source": "payment_date",
+          "destination": "rozpocet.zoznamuctovnychdokladov.datum_1"
+        }
+      ]
+    }
+  },
+  "options": {
+    "include_unmapped": true
+  }
+}

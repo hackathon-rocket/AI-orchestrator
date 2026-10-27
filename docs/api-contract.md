@@ -1,6 +1,6 @@
 # API Contract v1.0
 
-This is the existing synchronous Laravel-to-service contract. Laravel owns application-user authorization, OCR, storage, queues, persistence and confirmation. React receives proposals through Laravel. The service extracts and validates facts and proposes mapped values; it does not write to eGrant. This document freezes existing behavior, not a new API design.
+This is the existing synchronous Laravel-to-service contract. Laravel owns application-user authorization, OCR, storage, queues, persistence and confirmation. React receives proposals through Laravel. The service extracts and validates facts and proposes mapped values; it does not write to eGrant. This document protects API v1 behavior, including the additive mapping_status outcome field.
 
 ## 1. Endpoints and authentication
 
@@ -88,6 +88,7 @@ HTTP 200 returns all of these keys, including explicit nullable values:
 | `document_id` | string | Original reference. |
 | `status` | `"completed"` | The analysis request finished. |
 | `document_type` | string enum | `invoice`, `receipt`, `contract`, `bank_statement`, `unknown`. |
+| `mapping_status` | required string enum | `mapped`, `no_form`, `unsupported_document_type`, `no_values`; computed from the actual mapping result. |
 | `fields` | array of ExtractedField | Mapped scalar suggestions, possibly empty. |
 | `tables` | array of ExtractedTable | Mapped table suggestions, possibly empty. |
 | `warnings` | array of strings | Review, missing data, validation and mapping warnings. |
@@ -95,11 +96,22 @@ HTTP 200 returns all of these keys, including explicit nullable values:
 | `extracted_data` | object or null | Universal extraction, controlled by `include_unmapped`. |
 | `meta` | object | Processing/provider/schema metadata, below. |
 
-**Completed analysis, verified facts, available mapping and human confirmation are separate states.** `completed` does not mean mapping succeeded, all required values exist, the document is eligible, it is safe to submit automatically, or a user confirmed anything. There is no `mapping_status` property. Warnings and actual mapped values must be inspected.
+**Completed analysis, verified facts, available mapping and human confirmation are separate states.** `completed` does not mean mapping succeeded, all required values exist, the document is eligible, it is safe to submit automatically, or a user confirmed anything. `mapping_status` supplies the machine-readable mapping outcome. It is independent of `status`, field verification and human confirmation:
+
+| mapping_status | Deterministic meaning |
+|---|---|
+| `no_form` | No target form was supplied (omitted or null), regardless of document type. |
+| `unsupported_document_type` | The resolved mapping does not support the **validated** document type. This includes `unknown` for mappings restricted to recognized types. |
+| `mapped` | An applicable mapping emitted at least one non-null scalar value or table cell in an actual row. |
+| `no_values` | The mapping supports the validated type but emitted zero non-null suggestions. |
+
+The order above gives `no_form` precedence, then type support, then actual emitted values. Empty arrays, field/table/column definitions and null placeholders do not count. An empty table with `rows=[]` is `no_values` when no other mapped value exists. Numeric zero and negative amounts count. Safe suggestions with field status `needs_review` also count, because mapping has already applied server safety checks. Warnings and counts of extracted universal facts do not determine the status. It is not supplied by the LLM.
+
+`mapped` does not promise every field is filled, a valid amount is present, or all suggestions are verified. For example, a BBSK row containing only a safe `typ=FA` suggestion is already mapped. `requires_review` remains true for all four outcomes. Invalid mapping configuration and processing failures still return HTTP ErrorResponse, not an additional mapping status.
 
 Unknown/ambiguous classification does not erase independently supported facts. It blocks mappings configured only for recognized types. A recognized receipt or contract can complete successfully and still have no mapping. BBSK's current `bbsk_11824_default` mapping supports invoices only; the presence of other options in a form's select does not implement other document mappings.
 
-A successful BBSK invoice response has `fields=[]` and one table row in `rozpocet.zoznamuctovnychdokladov`: `typ="FA"`, `c_dokladu="FA-2026-001"`, `suma_doklad=1230.0`, original evidence on page 3. Two invoice items remain in universal `line_items`; they are not expanded into two accounting-document rows. Grant share, expense classification, ordinal, attachment and payment confirmation are not invented.
+A successful BBSK invoice response has `mapping_status="mapped"`, `fields=[]` and one table row in `rozpocet.zoznamuctovnychdokladov`: `typ="FA"`, `c_dokladu="FA-2026-001"`, `suma_doklad=1230.0`, original evidence on page 3. Two invoice items remain in universal `line_items`; they are not expanded into two accounting-document rows. Grant share, expense classification, ordinal, attachment and payment confirmation are not invented.
 
 The response has no `document` summary. Laravel adds its stored document object when composing the React response. See [Laravel integration](laravel-integration.md).
 
@@ -144,7 +156,7 @@ Omitted extraction fields use the missing-value policy. In requests, nullable `f
 
 ## 8. include_unmapped and metadata
 
-`options.include_unmapped=false` preserves the key `extracted_data` with value **null**. It does not remove mapped suggestions, warnings, status, metadata or `requires_review`. True returns the richer extraction. Both behaviors have full golden fixtures.
+`options.include_unmapped=false` preserves the key `extracted_data` with value **null**. It does not remove or alter `mapping_status`, mapped suggestions, warnings, status, metadata or `requires_review`. True returns the richer extraction. Both behaviors have full golden fixtures.
 
 Metadata has exactly the existing properties:
 
@@ -216,7 +228,7 @@ The deterministic fixture [prepare_xlsx.input.json](../tests/fixtures/contracts/
 
 Contract tests protect the paths/methods, request/response references, required fields, types, nullability, enum values, defaults, constraints, extra-property policy and security declarations. Editorial OpenAPI descriptions, examples, titles, summaries and operation IDs are excluded from the structural fixture. A property name is never excluded merely because it matches an editorial keyword.
 
-API paths stay `/v1/...`; metadata stays schema version `1.0`. This task changes no public field, route, authentication requirement, serialization, validation or mapping behavior. Contract fixtures are reviewed expectations, not permission for silent breaking changes. Future changes require explicit compatibility review of existing consumers and appropriate versioning; this task adds no version negotiation mechanism.
+API paths stay `/v1/...`; metadata stays schema version `1.0`. `mapping_status` is an additive required response field; previous properties, routes, authentication, value serialization, validation and mapping rules retain their behavior. Clients that ignore unknown JSON properties remain compatible. Strict response validators or generated clients must add this four-value enum. No request field or metadata field is added. Contract fixtures are reviewed expectations, not permission for silent breaking changes. Future changes require explicit compatibility review of existing consumers and appropriate versioning; this task adds no version negotiation mechanism.
 
 ## 13. Contract fixtures and tests
 
@@ -233,13 +245,13 @@ uv run python -m scripts.smoke_http
 
 On Windows where the system pytest temporary directory is inaccessible, add `--basetemp work/contract-v1-target` for targeted tests and a distinct `--basetemp work/contract-v1-full` for the full suite. This changes only test temporary storage.
 
-Seven paired request/response goldens cover mapped invoice, unsupported receipt, unknown, no form, mapped-only output, structured Excel and unpaginated OCR. Error and XLSX goldens plus a structural OpenAPI fixture protect the remaining boundaries. Only `meta.request_id`, `meta.duration_ms` and the error request ID are normalized after checking their structure and header agreement. Provider/model metadata, warnings, amounts, evidence, pages, coordinates and validation states remain exact. Expected files are never generated or updated during test execution. Review every fixture diff as an API change.
+Eight paired request/response goldens cover mapped invoice, unsupported receipt, unknown, no form, mapped-only output, structured Excel, unpaginated OCR and an applicable BBSK payment-date-only mapping with no values. All four mapping_status values are covered. Error and XLSX goldens plus a structural OpenAPI fixture protect the remaining boundaries. Only `meta.request_id`, `meta.duration_ms` and the error request ID are normalized after checking their structure and header agreement. Provider/model metadata, warnings, amounts, evidence, pages, coordinates and validation states remain exact. Expected files are never generated or updated during test execution. Review every fixture diff as an API change.
 
 Existing extraction/security/Excel/classification/money tests remain in force; these contract tests supplement them rather than replace semantic validation tests. Tests run with mock extraction and simulated provider failures, with external networking blocked. HTTP smoke uses loopback and a fresh ephemeral service token.
 
 ## 14. Integration limitations
 
-- HTTP 200 and `completed` cannot tell Laravel that mapping was available; inspect output/warnings. No separate mapping-status flag exists.
+- HTTP 200 and `completed` describe execution. Use `mapping_status` to distinguish mapping outcomes; inspect cells/warnings to assess completeness and verification.
 - BBSK invoice mapping does not implement receipt or contract mapping. Unknown/unsupported types must remain unmapped.
 - Rich Fact Decimal strings and mapped JSON numbers differ; consumers must preserve financial precision and nulls.
 - A null page means unpaginated/spreadsheet evidence, not page 1. `extracted_data=null` means omitted by option, not failed extraction.

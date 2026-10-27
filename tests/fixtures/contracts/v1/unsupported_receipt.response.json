@@ -2,6 +2,7 @@
   "document_id": "synthetic-receipt",
   "status": "completed",
   "document_type": "receipt",
+  "mapping_status": "unsupported_document_type",
   "fields": [],
   "tables": [],
   "warnings": [

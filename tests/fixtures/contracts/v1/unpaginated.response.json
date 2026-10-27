@@ -2,6 +2,7 @@
   "document_id": "synthetic-clean-invoice",
   "status": "completed",
   "document_type": "invoice",
+  "mapping_status": "mapped",
   "fields": [],
   "tables": [
     {

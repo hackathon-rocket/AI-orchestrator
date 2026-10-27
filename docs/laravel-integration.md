@@ -40,6 +40,17 @@ Use Laravel's stored `Extraction.raw` when verified page metadata is available. 
 
 Dispatch `AnalyzeDocument` after successful OCR persistence. Choose a job timeout above 110 seconds and queue visibility/retry-after longer than the job timeout. Retry a small bounded number of times only for retryable categories such as `busy`, `provider_rate_limited`, `provider_unavailable` and timeouts, with delay. Use the error code as well as HTTP status: `provider_configuration_error` is a permanent 503 until configuration is repaired. Do not retry bad auth, schema/input errors or invalid provider configuration automatically. Avoid an additional `Http::retry` loop stacked with job retries and the service's three-attempt maximum. For example, two job attempts can mean up to six model calls; budget accordingly. Persist results idempotently against document/version and mapping/version; Python is stateless.
 
+The analysis response also contains the server-computed `mapping_status`:
+
+| Value | Laravel interpretation |
+|---|---|
+| `mapped` | At least one non-null form suggestion exists; save for human review. This may be a partial row or only the document-type cell. |
+| `no_form` | No target form was supplied; universal extraction can still be saved. |
+| `unsupported_document_type` | The selected mapping does not support the validated type (including unknown). No invoice row should be inferred. |
+| `no_values` | The mapping is applicable but yielded no safe non-null suggestions. Do not treat a table definition as a populated row. |
+
+Use this enum rather than parsing localized warnings or testing whether tables/fields arrays are nonempty. `status="completed"` means execution completed for all four outcomes; none is user confirmation. Zero amounts and safe `needs_review` suggestions count as mapped. The field is returned even when `include_unmapped=false`; configuration/provider failures retain the existing HTTP error envelope. Keep the enum in persisted analysis results if needed for the review workflow. Strict client schemas must accept the additive response field. This does not change Laravel's own document status model or require a new frontend wrapper.
+
 Suggested status translation (owned by Laravel):
 
 | Internal state | React status / stage |

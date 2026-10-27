@@ -1,6 +1,6 @@
 # API v1 contract fixtures
 
-These are fixed, reviewed expectations for the mock API, not a fixture generator. Tests only read them. No real provider data or credentials are included.
+These are fixed, reviewed expectations for the mock API, not a fixture generator. Tests only read them. No real provider data or credentials are included. Response goldens now also protect the additive `mapping_status` field: invoice/mapped_only/unpaginated=mapped; no_form/structured_excel=no_form; unsupported_receipt/unknown=unsupported_document_type. The applicable-but-empty outcome has a no_values golden plus real HTTP tests in tests/integration/test_mapping_status.py.
 
 ## Files
 
@@ -15,6 +15,7 @@ Each of these names has `<name>.request.json` and `<name>.response.json`:
 | mapped_only | clean_invoice.json with include_unmapped=false; extracted_data stays explicitly null |
 | structured_excel | Existing structured_excel.json; rows/cells/locators and missing-currency review status retained |
 | unpaginated | clean_invoice.json with page=null; no invented page number |
+| no_values | clean invoice with an inline subset of the existing BBSK mapping, requesting only missing payment_date; applicable mapping, empty table rows |
 
 - `errors.json`: exact representative HTTP status/error messages and shapes.
 - `prepare_xlsx.input.json`: workbook recipe (sheet title and rows); tests create XLSX bytes in memory. No nondeterministic ZIP timestamps are compared.

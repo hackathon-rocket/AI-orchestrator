@@ -9,7 +9,7 @@ from app.mapping.mapper import map_extraction
 from app.observability.logging import event
 from app.processors.ocr_text import validate_content_limits
 from app.schemas.requests import AnalyzeRequest
-from app.schemas.responses import AnalyzeResponse, Metadata
+from app.schemas.responses import AnalyzeResponse, MappingStatus, Metadata
 from app.validators.validation import validate_extraction
 
 
@@ -23,14 +23,27 @@ class AnalysisOrchestrator:
 
     def postprocess(self, raw, content, config, form):
         data, warnings = validate_extraction(raw, content, self.settings)
+        mapping_status: MappingStatus
         if config:
             fields, tables, mapping_warnings = map_extraction(data, config, form)
             warnings.extend(mapping_warnings)
+            if data.document_type not in config.document_types:
+                mapping_status = "unsupported_document_type"
+            elif any(field.value is not None for field in fields) or any(
+                cell.value is not None
+                for table in tables
+                for row in table.rows
+                for cell in row.values()
+            ):
+                mapping_status = "mapped"
+            else:
+                mapping_status = "no_values"
         else:
             fields = []
             tables = []
             warnings.append("Cieľový formulár nebol zadaný; údaje nie sú mapované.")
-        return data, warnings, fields, tables
+            mapping_status = "no_form"
+        return data, warnings, fields, tables, mapping_status
 
     def _processing_finished(self, task: asyncio.Task) -> None:
         self.processing_tasks.discard(task)
@@ -75,7 +88,7 @@ class AnalysisOrchestrator:
                 )
                 self.processing_tasks.add(processing)
                 processing.add_done_callback(self._processing_finished)
-                data, warnings, fields, tables = await asyncio.shield(processing)
+                data, warnings, fields, tables, mapping_status = await asyncio.shield(processing)
                 event(
                     request_id,
                     "validation",
@@ -102,6 +115,7 @@ class AnalysisOrchestrator:
         return AnalyzeResponse(
             document_id=request.document_id,
             document_type=data.document_type,
+            mapping_status=mapping_status,
             fields=fields,
             tables=tables,
             warnings=list(dict.fromkeys(warnings)),

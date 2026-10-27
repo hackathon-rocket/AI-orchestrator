@@ -35,6 +35,7 @@ CASES = [
     "mapped_only",
     "structured_excel",
     "unpaginated",
+    "no_values",
 ]
 
 

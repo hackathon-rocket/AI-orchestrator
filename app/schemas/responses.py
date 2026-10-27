@@ -6,6 +6,8 @@ from app.schemas.common import Model
 from app.schemas.extraction import CellLocator, DocumentType, ExtractionData
 from app.schemas.requests import Content
 
+MappingStatus = Literal["mapped", "no_form", "unsupported_document_type", "no_values"]
+
 FieldType = Literal["string", "number", "currency", "date", "ico", "dic", "iban"]
 
 
@@ -49,6 +51,11 @@ class AnalyzeResponse(Model):
     document_id: str
     status: Literal["completed"] = "completed"
     document_type: DocumentType
+    mapping_status: MappingStatus = Field(
+        description=(
+            "Outcome of mapping validated extraction to the requested form; not user approval."
+        )
+    )
     fields: list[ExtractedField]
     tables: list[ExtractedTable]
     warnings: list[str]

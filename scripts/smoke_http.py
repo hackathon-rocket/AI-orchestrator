@@ -87,6 +87,7 @@ def main():
             assert row["suma_doklad"]["value"] == 1230
             assert row["suma_dotacia"]["value"] is None
             assert data["requires_review"] is True
+            assert data["mapping_status"] == "mapped"
             out = ROOT / "docs/examples"
             out.mkdir(parents=True, exist_ok=True)
             _write_json(out / "mock_response.json", data)
@@ -97,6 +98,7 @@ def main():
             )
             dynamic.raise_for_status()
             assert dynamic.json()["fields"][0]["value"] == "FA-2026-001"
+            assert dynamic.json()["mapping_status"] == "mapped"
             _write_json(out / "dynamic_response.json", dynamic.json())
             book = Workbook()
             sheet = book.active
@@ -130,6 +132,7 @@ def main():
             )
             xlsx.raise_for_status()
             assert xlsx.json()["tables"][0]["rows"][0]["suma_doklad"]["value"] == 123
+            assert xlsx.json()["mapping_status"] == "mapped"
             _write_json(out / "xlsx_response.json", xlsx.json())
             print(
                 json.dumps(
@@ -138,6 +141,7 @@ def main():
                         "unauthenticated_post": unauthorized.status_code,
                         "authenticated_post": result.status_code,
                         "provider": data["meta"]["provider"],
+                        "mapping_status": data["mapping_status"],
                         "dynamic_mapping_post": dynamic.status_code,
                         "prepare_xlsx_post": prepared.status_code,
                         "xlsx_analysis_post": xlsx.status_code,

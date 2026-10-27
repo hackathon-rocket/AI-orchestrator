@@ -460,6 +460,17 @@
           },
           "meta": {
             "$ref": "#/components/schemas/Metadata"
+          },
+          "mapping_status": {
+            "type": "string",
+            "enum": [
+              "mapped",
+              "no_form",
+              "unsupported_document_type",
+              "no_values"
+            ],
+            "title": "Mapping Status",
+            "description": "Outcome of mapping validated extraction to the requested form; not user approval."
           }
         },
         "additionalProperties": false,
@@ -467,6 +478,7 @@
         "required": [
           "document_id",
           "document_type",
+          "mapping_status",
           "fields",
           "tables",
           "warnings",
