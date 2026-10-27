@@ -1,0 +1,21 @@
+{
+  "document_id": "synthetic-contract",
+  "content": {
+    "language": "sk",
+    "pages": [
+      {
+        "page": 3,
+        "text": "ZMLUVA č. Z-001\nPredmet zmluvy: Prenájom sály\nDátum uzavretia zmluvy: 03.10.2026\nZmluvná suma: 200,00 EUR"
+      }
+    ],
+    "sheets": []
+  },
+  "form": {
+    "id": "bbsk_11824",
+    "schema": null,
+    "mapping_id": "bbsk_11824_default"
+  },
+  "options": {
+    "include_unmapped": true
+  }
+}

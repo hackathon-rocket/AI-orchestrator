@@ -1,0 +1,21 @@
+{
+  "document_id": "synthetic-bank-statement",
+  "content": {
+    "language": "sk",
+    "pages": [
+      {
+        "page": 3,
+        "text": "VÝPIS Z ÚČTU\nObdobie od: 01.10.2026\nObdobie do: 31.10.2026\nPočiatočný zostatok: 300,00 EUR\nKonečný zostatok: 200,00 EUR\nDátum transakcie: 05.10.2026 | Popis transakcie: Nájom | Suma transakcie: -100,00 | Referencia: Z-001"
+      }
+    ],
+    "sheets": []
+  },
+  "form": {
+    "id": "bbsk_11824",
+    "schema": null,
+    "mapping_id": "bbsk_11824_default"
+  },
+  "options": {
+    "include_unmapped": true
+  }
+}

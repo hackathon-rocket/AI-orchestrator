@@ -1,0 +1,43 @@
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "SECTION",
+      "name": "Základné údaje",
+      "tag": "zakladne_udaje",
+      "mandatory": true,
+      "children": [
+        {
+          "type": "SIMPLE_STRING",
+          "name": "Názov organizácie",
+          "tag": "nazov_org",
+          "mandatory": true,
+          "source_tag": "predkladatel.pravnicka_osoba.ico.name",
+          "config": {
+            "is_readonly": 0
+          }
+        },
+        {
+          "type": "SIMPLE_STRING",
+          "name": "Adresa sídla organizácie",
+          "tag": "adresa",
+          "mandatory": true,
+          "source_tag": "predkladatel.pravnicka_osoba.ico.formatted_address",
+          "config": {
+            "is_readonly": 0
+          }
+        },
+        {
+          "type": "EMAIL",
+          "name": "Email organizácie",
+          "tag": "email",
+          "mandatory": true,
+          "source_tag": "predkladatel.pravnicka_osoba.statutar[0].email",
+          "config": {
+            "is_readonly": 0
+          }
+        }
+      ]
+    }
+  ]
+}

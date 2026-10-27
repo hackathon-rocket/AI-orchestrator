@@ -1,0 +1,39 @@
+{
+  "scope": "Offline full validate_extraction, 3 columns, input construction excluded; one measured run per size per revision. Optional header_cells present in timing workload.",
+  "python": "3.13.0",
+  "platform": "Windows",
+  "before": [
+    {
+      "rows": 200,
+      "seconds": 0.579738,
+      "status": "needs_review"
+    },
+    {
+      "rows": 500,
+      "seconds": 3.272833,
+      "status": "needs_review"
+    },
+    {
+      "rows": 1000,
+      "seconds": 16.945518,
+      "status": "needs_review"
+    }
+  ],
+  "after": [
+    {
+      "rows": 200,
+      "seconds": 0.073372,
+      "status": "needs_review"
+    },
+    {
+      "rows": 500,
+      "seconds": 0.180928,
+      "status": "needs_review"
+    },
+    {
+      "rows": 1000,
+      "seconds": 0.426872,
+      "status": "needs_review"
+    }
+  ]
+}

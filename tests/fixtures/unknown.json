@@ -1,0 +1,21 @@
+{
+  "document_id": "synthetic-unknown",
+  "content": {
+    "language": "sk",
+    "pages": [
+      {
+        "page": 3,
+        "text": "Poznámka k projektu. Termín zatiaľ nebol určený."
+      }
+    ],
+    "sheets": []
+  },
+  "form": {
+    "id": "bbsk_11824",
+    "schema": null,
+    "mapping_id": "bbsk_11824_default"
+  },
+  "options": {
+    "include_unmapped": true
+  }
+}

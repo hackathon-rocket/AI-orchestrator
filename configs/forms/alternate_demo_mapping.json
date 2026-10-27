@@ -1,0 +1,15 @@
+{
+  "id": "alternate_demo",
+  "form_id": "alternate_demo",
+  "schema_file": "alternate_demo_schema.json",
+  "rules": [
+    {
+      "source": "invoice_number",
+      "destination": "doklad.referencia"
+    },
+    {
+      "source": "total_gross",
+      "destination": "doklad.celkom"
+    }
+  ]
+}

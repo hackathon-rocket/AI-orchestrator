@@ -1,0 +1,26 @@
+# Security and safety
+
+Analysis requires a shared server bearer token compared with `secrets.compare_digest`. Blank/short tokens fail closed even in mock mode. Health/readiness/version expose no secrets. CORS is disabled. Use a trusted internal network, TLS at ingress, rate limits and scoped Laravel access. Authentication here identifies the calling service; tenancy and document ownership remain Laravel responsibilities.
+
+The request guard uses the same root-path handling as the router. Deploying under a URL prefix preserves authentication, media-type checks and streamed-body limits on both POST endpoints. Media types and content codings are compared case-insensitively; compressed bodies remain unsupported.
+
+No eGrant client, MCP writer, database client, persistent filesystem upload route or confirmation route exists. The authenticated XLSX endpoint processes bounded bytes in memory. Providers cannot access tools, execute code, browse links or fetch form data. The service does not store documents or submit extracted suggestions.
+
+Model prompts explicitly treat all pages, cells and embedded instructions as untrusted data. Form JSON is parsed deterministically, not sent as model instructions. Every candidate then passes source matching and semantic checks, with unsafe suggestions dropped or withheld from mapping. This reduces prompt injection impact but is not a proof against all hostile documents or corrupted OCR. Human review remains mandatory; do not equate a matching quote or `verified` status with invoice authenticity.
+
+Logs are structured JSON with UUID request ID, opaque document reference, stage, provider category, duration and error category only. They omit source text, prompts, extracted personal/financial values, headers, raw provider responses and exception tracebacks. SDK HTTP logging is suppressed. Disable server/proxy body logging and debug instrumentation in deployment. API input-validation responses do not echo rejected values. Do not use personal data or secrets as `document_id` or correlation IDs. Demo response files contain only synthetic fixtures.
+
+Keys are environment-only; `.env.example` leaves every credential blank. Never put keys in React, URLs, fixtures or version control. Any credentials shared previously outside approved secret storage should be rotated by their owner; this implementation does not retrieve or reuse them. Remote processing of actual personal/financial documents requires company/data-owner authorization and the appropriate vendor/privacy arrangements. `ALLOW_REMOTE_LLM=true` is an operator gate, not a substitute for that authorization.
+
+The official OpenAI adapter uses `store=false`; this is a request setting, not a claim of zero retention under all account/provider policies. Compatible gateways and OpenRouter have their own data handling rules. Local URLs are not assumed to exist. The base URL comes only from server configuration, cannot contain embedded credentials, and does not follow redirects. No automatic capability calls or paid fallback are made.
+
+All retry loops and content limits are bounded. JSON bodies are limited while streamed, before parsing. Pydantic schemas enforce cardinalities and reject nonfinite numbers. Form parser nodes/depth are bounded and form expressions never execute. Both the XLSX CLI helper and internal authenticated preparation route use the same bounded parser. Compressed/expanded size, entry count, ratio, XML node count, sheet/cell/row dimensions and deadlines are checked before/while parsing. Macros, embedded objects, external relationships, entities/DTDs and inconsistent dimensions are rejected; formulas are never evaluated. For untrusted bulk workbooks, preprocess in a constrained Laravel worker and keep the same total row/cell limits.
+
+Confidence is an uncalibrated review heuristic. Grant share, eligibility, expenditure class, payment completion and attachment references cannot be inferred from a model or a filename. Keep independent grant-accounting checks and human confirmation in the host application.
+
+
+`defusedxml` was added because [openpyxl's security documentation](https://openpyxl.pages.heptapod.net/openpyxl/) explicitly recommends it to protect XML parsing. The dependency is pinned in `uv.lock`; preflight additionally uses its DTD/entity rejection. No archive is extracted to disk and no workbook URL is followed.
+
+Inline mappings are trusted-service inputs, not a tenant permission system. They are validated before model execution, never stored, and cannot override built-in BBSK reserved fields or registered readonly protections. Form JSON remains outside the model prompt. Review metadata supplied by the model cannot set the mapper's private safety decision.
+
+Provider error bodies and exception messages remain hidden. Stable categories distinguish auth, rate limiting, unavailability, timeouts, invalid output, unsupported structured-output modes and configuration errors. Only transient categories/invalid output retry. Parser/validation tasks still running after HTTP cancellation retain their slots; concurrency cannot grow through repeated timed-out calls. Deployment process/container limits remain appropriate for hostile bulk documents.

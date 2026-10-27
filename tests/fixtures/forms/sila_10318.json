@@ -1,0 +1,37 @@
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "SECTION",
+      "name": "Predkladateľ",
+      "tag": "predkladatel",
+      "children": [
+        {
+          "type": "SUB_SECTION",
+          "name": "Inštrukcie",
+          "tag": "instrukcie"
+        },
+        {
+          "type": "SIMPLE_STRING",
+          "name": "Číslo projektu",
+          "tag": "cislo_projektu",
+          "source_tag": "application_number",
+          "force_source_value": true,
+          "config": {
+            "is_readonly": 1
+          }
+        },
+        {
+          "type": "SIMPLE_STRING",
+          "name": "Číslo zmluvy",
+          "tag": "cislo_zmluvy",
+          "source_tag": "agreement_no",
+          "force_source_value": true,
+          "config": {
+            "is_readonly": 1
+          }
+        }
+      ]
+    }
+  ]
+}

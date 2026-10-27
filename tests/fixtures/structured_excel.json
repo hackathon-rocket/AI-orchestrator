@@ -1,0 +1,39 @@
+{
+  "document_id": "synthetic-excel",
+  "content": {
+    "pages": [],
+    "sheets": [
+      {
+        "name": "Doklad",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              {
+                "coordinate": "A1",
+                "value": "Číslo faktúry"
+              },
+              {
+                "coordinate": "B1",
+                "value": "XLS-001"
+              }
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              {
+                "coordinate": "A2",
+                "value": "Suma spolu"
+              },
+              {
+                "coordinate": "B2",
+                "value": 120.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

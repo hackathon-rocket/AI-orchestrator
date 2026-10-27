@@ -1,0 +1,171 @@
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "SECTION",
+      "name": "Rozpočet",
+      "tag": "rozpocet",
+      "mandatory": true,
+      "children": [
+        {
+          "type": "TABLE_LIST",
+          "name": "Zoznam učtovných dokladov",
+          "tag": "zoznamuctovnychdokladov",
+          "mandatory": true,
+          "config": {
+            "add_rows": 1
+          },
+          "children": [
+            {
+              "type": "TABLE_ITEM_NUMBER",
+              "name": "Por. č.",
+              "tag": "p_c",
+              "mandatory": true,
+              "config": {
+                "is_readonly": 0,
+                "fixed_values": [
+                  {
+                    "value": "",
+                    "readonly": "0"
+                  },
+                  {
+                    "value": "",
+                    "readonly": "0"
+                  },
+                  {
+                    "value": "",
+                    "readonly": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "TABLE_ITEM_STRING",
+              "name": "Názov výdavku",
+              "tag": "nazov_vydavku",
+              "mandatory": true,
+              "config": {
+                "is_readonly": 0,
+                "fixed_values": [
+                  {
+                    "value": "",
+                    "readonly": "0"
+                  },
+                  {
+                    "value": "",
+                    "readonly": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "TABLE_ITEM_CURRENCY",
+              "name": "Suma na účt. doklade",
+              "tag": "suma_doklad",
+              "mandatory": true,
+              "config": {
+                "is_readonly": 0
+              }
+            },
+            {
+              "type": "TABLE_ITEM_CURRENCY",
+              "name": "Suma z dotácie",
+              "tag": "suma_dotacia",
+              "mandatory": true,
+              "config": {
+                "is_readonly": 0
+              }
+            },
+            {
+              "type": "TABLE_ITEM_SELECT",
+              "name": "Druh výdavku",
+              "tag": "druh",
+              "mandatory": true,
+              "config": {
+                "values": {
+                  "B - bežný": "B - bežný",
+                  "K - kapitálový": "K - kapitálový"
+                },
+                "roller_source": "",
+                "is_readonly": 0
+              }
+            },
+            {
+              "type": "TABLE_ITEM_SELECT",
+              "name": "Typ účt. dokladu",
+              "tag": "typ",
+              "mandatory": true,
+              "config": {
+                "values": {
+                  "FA": "Faktúra",
+                  "PPD": "Príjmový pokladničný doklady",
+                  "VPD": "Výdavkový pokladničný doklad",
+                  "Zmluva": "Zmluva"
+                },
+                "roller_source": "",
+                "is_readonly": 0
+              }
+            },
+            {
+              "type": "TABLE_ITEM_STRING",
+              "name": "Číslo účtovného dokladu",
+              "tag": "c_dokladu",
+              "mandatory": true,
+              "config": {
+                "is_readonly": 0,
+                "fixed_values": [
+                  {
+                    "value": "",
+                    "readonly": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "TABLE_ITEM_SELECT",
+              "name": "Spôsob úhrady",
+              "tag": "uhrada",
+              "mandatory": true,
+              "config": {
+                "values": {
+                  "prevodom": "prevodom",
+                  "v hotovosti": "v hotovosti"
+                }
+              }
+            },
+            {
+              "type": "TABLE_ITEM_DATE",
+              "name": "Dátum úhrady",
+              "tag": "datum_1",
+              "mandatory": true,
+              "config": {
+                "is_readonly": 0
+              }
+            },
+            {
+              "type": "TABLE_ITEM_DATE",
+              "name": "Dátum dodania/ služieb",
+              "tag": "datum",
+              "mandatory": true,
+              "config": {
+                "is_readonly": 0
+              }
+            },
+            {
+              "type": "TABLE_ITEM_FILE_LIST",
+              "name": "Účtovný doklad",
+              "tag": "uctovny_doklad",
+              "mandatory": true
+            },
+            {
+              "type": "TABLE_ITEM_FILE_LIST",
+              "name": "Zakúpený tovar",
+              "tag": "tovar",
+              "mandatory": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

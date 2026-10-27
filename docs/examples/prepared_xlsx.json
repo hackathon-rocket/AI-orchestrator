@@ -1,0 +1,79 @@
+{
+  "content": {
+    "language": "sk",
+    "pages": [],
+    "sheets": [
+      {
+        "name": "Doklad",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              {
+                "coordinate": "A1",
+                "value": "FAKTÚRA č. XLS-1",
+                "formula": null,
+                "header_cells": []
+              }
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              {
+                "coordinate": "A2",
+                "value": "Číslo faktúry",
+                "formula": null,
+                "header_cells": []
+              },
+              {
+                "coordinate": "B2",
+                "value": "Suma spolu",
+                "formula": null,
+                "header_cells": []
+              },
+              {
+                "coordinate": "C2",
+                "value": "Mena",
+                "formula": null,
+                "header_cells": []
+              }
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              {
+                "coordinate": "A3",
+                "value": "XLS-1",
+                "formula": null,
+                "header_cells": [
+                  "A2"
+                ]
+              },
+              {
+                "coordinate": "B3",
+                "value": 123,
+                "formula": null,
+                "header_cells": [
+                  "B2"
+                ]
+              },
+              {
+                "coordinate": "C3",
+                "value": "EUR",
+                "formula": null,
+                "header_cells": [
+                  "C2"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "warnings": [
+    "Príprava zošita nevykonáva vzorce ani analýzu LLM."
+  ]
+}

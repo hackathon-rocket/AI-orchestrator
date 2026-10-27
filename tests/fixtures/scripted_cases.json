@@ -1,0 +1,587 @@
+[
+  {
+    "name": "realistic_multiline_invoice",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "Daňový doklad - faktúra č. 2026/017\nVariabilný symbol: 2026017\n\nDodávateľ:\nLipa tlač, s.r.o.\nJarná 12, Banská Bystrica\nIČO: 12 345 679\nDIČ: 2020123456\n\nOdberateľ:\nObčianske združenie Most\nIČO: 87 654 326\nDIČ: 2020654321\n\nDátum vystavenia:\n02. 10. 2026\nDátum dodania: 30.09.2026\nSplatnosť: 16.10.2026\n\nMena dokladu: EUR\nPredmet fakturácie: Tlač programov podujatia\nZáklad dane: 100,00\nDPH celkom: 23,00\nCelkom na úhradu:\n123,00\n"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "invoice",
+      "classification": {
+        "value": "invoice",
+        "status": "verified",
+        "confidence": 0.8,
+        "evidence": {
+          "page": 7,
+          "quote": "Daňový doklad - faktúra č. 2026/017"
+        }
+      },
+      "fields": {
+        "invoice_number": {
+          "value": "2026/017",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Daňový doklad - faktúra č. 2026/017"
+          }
+        },
+        "supplier_name": {
+          "value": "Lipa tlač, s.r.o.",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Dodávateľ:\nLipa tlač, s.r.o."
+          }
+        },
+        "supplier_ico": {
+          "value": "12345679",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "IČO: 12 345 679"
+          }
+        },
+        "supplier_dic": {
+          "value": "2020123456",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "DIČ: 2020123456"
+          }
+        },
+        "customer_ico": {
+          "value": "87654326",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "IČO: 87 654 326"
+          }
+        },
+        "issue_date": {
+          "value": "2026-10-02",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Dátum vystavenia:\n02. 10. 2026"
+          }
+        },
+        "delivery_date": {
+          "value": "2026-09-30",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Dátum dodania: 30.09.2026"
+          }
+        },
+        "due_date": {
+          "value": "2026-10-16",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Splatnosť: 16.10.2026"
+          }
+        },
+        "expense_description": {
+          "value": "Tlač programov podujatia",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Predmet fakturácie: Tlač programov podujatia"
+          }
+        },
+        "total_net": {
+          "value": "100.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Základ dane: 100,00"
+          }
+        },
+        "total_vat": {
+          "value": "23.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "DPH celkom: 23,00"
+          }
+        },
+        "total_gross": {
+          "value": "123.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Celkom na úhradu:\n123,00"
+          }
+        }
+      }
+    },
+    "expected": {
+      "invoice_number": {
+        "value": "2026/017",
+        "status": "verified"
+      },
+      "supplier_name": {
+        "value": "Lipa tlač, s.r.o.",
+        "status": "verified"
+      },
+      "supplier_ico": {
+        "value": "12345679",
+        "status": "verified"
+      },
+      "supplier_dic": {
+        "value": "2020123456",
+        "status": "verified"
+      },
+      "customer_ico": {
+        "value": "87654326",
+        "status": "verified"
+      },
+      "issue_date": {
+        "value": "2026-10-02",
+        "status": "verified"
+      },
+      "delivery_date": {
+        "value": "2026-09-30",
+        "status": "verified"
+      },
+      "due_date": {
+        "value": "2026-10-16",
+        "status": "verified"
+      },
+      "expense_description": {
+        "value": "Tlač programov podujatia",
+        "status": "verified"
+      },
+      "total_net": {
+        "value": "100.00",
+        "status": "verified"
+      },
+      "total_vat": {
+        "value": "23.00",
+        "status": "verified"
+      },
+      "total_gross": {
+        "value": "123.00",
+        "status": "verified"
+      },
+      "payment_date": {
+        "value": null,
+        "status": "not_found"
+      }
+    },
+    "mapped": {
+      "suma_doklad": 123.0,
+      "datum_1": null,
+      "suma_dotacia": null
+    }
+  },
+  {
+    "name": "ambiguous_identifier",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "Referenčné údaje: 12 345 679"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "unknown",
+      "classification": {},
+      "fields": {
+        "supplier_ico": {
+          "value": "12345679",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Referenčné údaje: 12 345 679"
+          }
+        }
+      }
+    },
+    "expected": {
+      "supplier_ico": {
+        "value": "12345679",
+        "status": "needs_review"
+      }
+    },
+    "mapped": {}
+  },
+  {
+    "name": "wrong_party",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "Odberateľ:\nMost\nIČO: 12 345 679"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "unknown",
+      "classification": {},
+      "fields": {
+        "supplier_ico": {
+          "value": "12345679",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "IČO: 12 345 679"
+          }
+        }
+      }
+    },
+    "expected": {
+      "supplier_ico": {
+        "value": "12345679",
+        "status": "needs_review"
+      }
+    },
+    "mapped": {}
+  },
+  {
+    "name": "invented_digit",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "IČO dodávateľa: 12345679"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "unknown",
+      "classification": {},
+      "fields": {
+        "supplier_ico": {
+          "value": "12345678",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "IČO dodávateľa: 12345679"
+          }
+        }
+      }
+    },
+    "expected": {
+      "supplier_ico": {
+        "value": null,
+        "status": "not_found"
+      }
+    },
+    "mapped": {}
+  },
+  {
+    "name": "due_is_not_payment",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "Splatnosť: 16.10.2026"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "unknown",
+      "classification": {},
+      "fields": {
+        "payment_date": {
+          "value": "2026-10-16",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Splatnosť: 16.10.2026"
+          }
+        }
+      }
+    },
+    "expected": {
+      "payment_date": {
+        "value": null,
+        "status": "not_found"
+      }
+    },
+    "mapped": {}
+  },
+  {
+    "name": "net_is_not_gross",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "Celkom bez DPH: 100,00 EUR"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "unknown",
+      "classification": {},
+      "fields": {
+        "total_gross": {
+          "value": "100.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Celkom bez DPH: 100,00 EUR"
+          }
+        }
+      }
+    },
+    "expected": {
+      "total_gross": {
+        "value": null,
+        "status": "not_found"
+      }
+    },
+    "mapped": {}
+  },
+  {
+    "name": "missing_currency",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "Suma spolu: 120,00"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "unknown",
+      "classification": {},
+      "fields": {
+        "total_gross": {
+          "value": "120.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Suma spolu: 120,00"
+          }
+        }
+      }
+    },
+    "expected": {
+      "total_gross": {
+        "value": "120.00",
+        "status": "needs_review"
+      }
+    },
+    "mapped": {}
+  },
+  {
+    "name": "unknown_but_grounded",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "Prehľad údajov\nSuma spolu: 120,00 EUR"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "unknown",
+      "classification": {},
+      "fields": {
+        "total_gross": {
+          "value": "120.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Suma spolu: 120,00 EUR"
+          }
+        }
+      }
+    },
+    "expected": {
+      "total_gross": {
+        "value": "120.00",
+        "status": "verified"
+      }
+    },
+    "mapped": {}
+  },
+  {
+    "name": "ambiguous_total",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "Údaj: 120,00 EUR"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "unknown",
+      "classification": {},
+      "fields": {
+        "total_gross": {
+          "value": "120.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Údaj: 120,00 EUR"
+          }
+        }
+      }
+    },
+    "expected": {
+      "total_gross": {
+        "value": "120.00",
+        "status": "needs_review"
+      }
+    },
+    "mapped": {}
+  },
+  {
+    "name": "currency_conflict",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "FAKTÚRA č. F-1\nMena dokladu: CZK\nSuma spolu: 120,00 EUR"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "invoice",
+      "classification": {
+        "value": "invoice",
+        "status": "verified",
+        "confidence": 0.8,
+        "evidence": {
+          "page": 7,
+          "quote": "FAKTÚRA č. F-1"
+        }
+      },
+      "fields": {
+        "total_gross": {
+          "value": "120.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Suma spolu: 120,00 EUR"
+          }
+        }
+      }
+    },
+    "expected": {
+      "total_gross": {
+        "value": "120.00",
+        "status": "needs_review"
+      }
+    },
+    "mapped": {
+      "suma_doklad": null
+    }
+  },
+  {
+    "name": "unrelated_bank_currency",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "FAKTÚRA č. F-1\nSuma spolu: 120,00 EUR\nMena bankového účtu: USD"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "invoice",
+      "classification": {
+        "value": "invoice",
+        "status": "verified",
+        "confidence": 0.8,
+        "evidence": {
+          "page": 7,
+          "quote": "FAKTÚRA č. F-1"
+        }
+      },
+      "fields": {
+        "total_gross": {
+          "value": "120.00",
+          "status": "verified",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Suma spolu: 120,00 EUR"
+          }
+        }
+      }
+    },
+    "expected": {
+      "total_gross": {
+        "value": "120.00",
+        "status": "verified"
+      }
+    },
+    "mapped": {
+      "suma_doklad": 120.0
+    }
+  },
+  {
+    "name": "safe_review_candidate",
+    "content": {
+      "pages": [
+        {
+          "page": 7,
+          "text": "FAKTÚRA č. F-1\nPredmet fakturácie: Servis"
+        }
+      ]
+    },
+    "raw": {
+      "document_type": "invoice",
+      "classification": {
+        "value": "invoice",
+        "status": "verified",
+        "confidence": 0.8,
+        "evidence": {
+          "page": 7,
+          "quote": "FAKTÚRA č. F-1"
+        }
+      },
+      "fields": {
+        "expense_description": {
+          "value": "Servis",
+          "status": "needs_review",
+          "confidence": 0.8,
+          "evidence": {
+            "page": 7,
+            "quote": "Predmet fakturácie: Servis"
+          }
+        }
+      }
+    },
+    "expected": {
+      "expense_description": {
+        "value": "Servis",
+        "status": "needs_review"
+      }
+    },
+    "mapped": {
+      "nazov_vydavku": "Servis"
+    }
+  }
+]

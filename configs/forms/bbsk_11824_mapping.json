@@ -1,0 +1,54 @@
+{
+  "id": "bbsk_11824_default",
+  "form_id": "bbsk_11824",
+  "schema_file": "bbsk_11824_schema.json",
+  "document_types": [
+    "invoice"
+  ],
+  "rules": [
+    {
+      "source": "invoice_number",
+      "destination": "rozpocet.zoznamuctovnychdokladov.c_dokladu"
+    },
+    {
+      "source": "total_gross",
+      "destination": "rozpocet.zoznamuctovnychdokladov.suma_doklad",
+      "required_currency": "EUR"
+    },
+    {
+      "source": "delivery_date",
+      "destination": "rozpocet.zoznamuctovnychdokladov.datum"
+    },
+    {
+      "source": "payment_date",
+      "destination": "rozpocet.zoznamuctovnychdokladov.datum_1"
+    },
+    {
+      "source": "expense_description",
+      "destination": "rozpocet.zoznamuctovnychdokladov.nazov_vydavku",
+      "review_warning": "Názov výdavku je opis z dokladu; súlad so zmluvou musí posúdiť používateľ."
+    },
+    {
+      "source": "payment_method",
+      "destination": "rozpocet.zoznamuctovnychdokladov.uhrada",
+      "value_map": {
+        "prevodom": "prevodom",
+        "v hotovosti": "v hotovosti"
+      }
+    },
+    {
+      "source": "classification",
+      "destination": "rozpocet.zoznamuctovnychdokladov.typ",
+      "value_map": {
+        "invoice": "FA"
+      }
+    }
+  ],
+  "reserved": [
+    "rozpocet.zoznamuctovnychdokladov.suma_dotacia",
+    "rozpocet.zoznamuctovnychdokladov.druh",
+    "rozpocet.zoznamuctovnychdokladov.p_c",
+    "rozpocet.zoznamuctovnychdokladov.uctovny_doklad",
+    "rozpocet.zoznamuctovnychdokladov.tovar"
+  ]
+}

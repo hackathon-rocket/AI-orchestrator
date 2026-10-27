@@ -1,0 +1,48 @@
+{
+  "mode": "synthetic_mock_only",
+  "cases": 2,
+  "scripted_validation": {
+    "mode": "synthetic_scripted_raw_proposals_only",
+    "cases": 12,
+    "counts": {
+      "annotated_fields": 24,
+      "expected_present": 20,
+      "predicted_present": 20,
+      "verified_correct": 14,
+      "reviewable_correct": 6,
+      "incorrectly_extracted": 0,
+      "false_positives": 0,
+      "false_rejections": 0,
+      "correct_missing": 4,
+      "status_correct": 24,
+      "mapping_correct": 6,
+      "mapping_total": 6
+    },
+    "correct_retention_coverage": 1.0,
+    "false_rejection_rate": 0.0,
+    "incorrect_prediction_rate": 0.0,
+    "status_accuracy": 1.0,
+    "mapping_accuracy": 1.0,
+    "latency_ms": {
+      "median": 3.2,
+      "max": 15.56
+    },
+    "scope": "Only annotated synthetic fields. Scripted proposals test deterministic validation, not model recall or real OCR quality."
+  },
+  "extraction_accuracy": 1.0,
+  "missing_value_accuracy": 1.0,
+  "hallucination_rate": 0.0,
+  "mapping_accuracy": 1.0,
+  "counts": {
+    "present_fields": 4,
+    "missing_fields": 3,
+    "predicted_non_null": 4,
+    "hallucinated_on_absent_fields": 0,
+    "mapped_fields": 6
+  },
+  "latency_ms": {
+    "median": 60.07,
+    "max": 81.38
+  },
+  "scope": "Only explicitly annotated fields are scored; these are fixture regression metrics, not real model accuracy."
+}

@@ -1,0 +1,25 @@
+Daňový doklad - faktúra č. 2026/017
+Variabilný symbol: 2026017
+
+Dodávateľ:
+Lipa tlač, s.r.o.
+Jarná 12, Banská Bystrica
+IČO: 12 345 679
+DIČ: 2020123456
+
+Odberateľ:
+Občianske združenie Most
+IČO: 87 654 326
+DIČ: 2020654321
+
+Dátum vystavenia:
+02. 10. 2026
+Dátum dodania: 30.09.2026
+Splatnosť: 16.10.2026
+
+Mena dokladu: EUR
+Predmet fakturácie: Tlač programov podujatia
+Základ dane: 100,00
+DPH celkom: 23,00
+Celkom na úhradu:
+123,00

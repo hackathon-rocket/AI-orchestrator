@@ -1,0 +1,117 @@
+import asyncio
+from time import perf_counter
+
+from app.core.config import Settings
+from app.core.errors import ServiceError
+from app.llm.base import LLMProvider
+from app.mapping.config_loader import ConfigLoader
+from app.mapping.mapper import map_extraction
+from app.observability.logging import event
+from app.processors.ocr_text import validate_content_limits
+from app.schemas.requests import AnalyzeRequest
+from app.schemas.responses import AnalyzeResponse, Metadata
+from app.validators.validation import validate_extraction
+
+
+class AnalysisOrchestrator:
+    def __init__(self, settings: Settings, provider: LLMProvider, loader: ConfigLoader):
+        self.settings = settings
+        self.provider = provider
+        self.loader = loader
+        self.slots = asyncio.Semaphore(settings.max_concurrency)
+        self.processing_tasks = set()
+
+    def postprocess(self, raw, content, config, form):
+        data, warnings = validate_extraction(raw, content, self.settings)
+        if config:
+            fields, tables, mapping_warnings = map_extraction(data, config, form)
+            warnings.extend(mapping_warnings)
+        else:
+            fields = []
+            tables = []
+            warnings.append("Cieľový formulár nebol zadaný; údaje nie sú mapované.")
+        return data, warnings, fields, tables
+
+    def _processing_finished(self, task: asyncio.Task) -> None:
+        self.processing_tasks.discard(task)
+        self.slots.release()
+        if not task.cancelled():
+            task.exception()  # Consume errors even if the HTTP caller has left.
+
+    async def close(self) -> None:
+        if self.processing_tasks:
+            await asyncio.gather(*self.processing_tasks, return_exceptions=True)
+
+    async def analyze(self, request: AnalyzeRequest, request_id: str) -> AnalyzeResponse:
+        started_at = perf_counter()
+        validate_content_limits(request.content, self.settings)
+
+        config = None
+        form = None
+        schema_source = "none"
+        if request.form:
+            config, form, schema_source = self.loader.resolve(request.form)
+
+        event(request_id, "input", document_id=request.document_id, provider=self.provider.name)
+        try:
+            await asyncio.wait_for(self.slots.acquire(), self.settings.queue_timeout_seconds)
+        except TimeoutError:
+            raise ServiceError(
+                "busy", "Služba je vyťažená. Skúste požiadavku zopakovať.", 429
+            ) from None
+
+        processing = None
+        try:
+            async with asyncio.timeout(self.settings.analysis_timeout_seconds):
+                raw = await self.provider.extract(request.content)
+                event(
+                    request_id,
+                    "extraction",
+                    document_id=request.document_id,
+                    provider=self.provider.name,
+                )
+                processing = asyncio.create_task(
+                    asyncio.to_thread(self.postprocess, raw, request.content, config, form)
+                )
+                self.processing_tasks.add(processing)
+                processing.add_done_callback(self._processing_finished)
+                data, warnings, fields, tables = await asyncio.shield(processing)
+                event(
+                    request_id,
+                    "validation",
+                    document_id=request.document_id,
+                    provider=self.provider.name,
+                )
+        except TimeoutError:
+            raise ServiceError(
+                "analysis_timeout", "Časový limit analýzy bol prekročený.", 504
+            ) from None
+        finally:
+            # Once started, the worker owns its slot until completion, even after cancellation.
+            if processing is None:
+                self.slots.release()
+
+        duration_ms = round((perf_counter() - started_at) * 1000, 2)
+        event(
+            request_id,
+            "completed",
+            document_id=request.document_id,
+            provider=self.provider.name,
+            duration_ms=duration_ms,
+        )
+        return AnalyzeResponse(
+            document_id=request.document_id,
+            document_type=data.document_type,
+            fields=fields,
+            tables=tables,
+            warnings=list(dict.fromkeys(warnings)),
+            extracted_data=data if request.options.include_unmapped else None,
+            meta=Metadata(
+                provider=self.provider.name,
+                model=self.provider.model_name,
+                request_id=request_id,
+                duration_ms=duration_ms,
+                mapping_id=config.id if config else None,
+                schema_source=schema_source,
+            ),
+        )

@@ -1,0 +1,568 @@
+{
+  "document_id": "synthetic-xlsx-http",
+  "status": "completed",
+  "document_type": "invoice",
+  "fields": [],
+  "tables": [
+    {
+      "tag": "rozpocet.zoznamuctovnychdokladov",
+      "label": "Zoznam učtovných dokladov",
+      "columns": [
+        {
+          "tag": "c_dokladu",
+          "label": "Číslo účtovného dokladu",
+          "type": "string"
+        },
+        {
+          "tag": "suma_doklad",
+          "label": "Suma na účt. doklade",
+          "type": "currency"
+        },
+        {
+          "tag": "datum",
+          "label": "Dátum dodania/ služieb",
+          "type": "date"
+        },
+        {
+          "tag": "datum_1",
+          "label": "Dátum úhrady",
+          "type": "date"
+        },
+        {
+          "tag": "nazov_vydavku",
+          "label": "Názov výdavku",
+          "type": "string"
+        },
+        {
+          "tag": "uhrada",
+          "label": "Spôsob úhrady",
+          "type": "string"
+        },
+        {
+          "tag": "typ",
+          "label": "Typ účt. dokladu",
+          "type": "string"
+        },
+        {
+          "tag": "suma_dotacia",
+          "label": "Suma z dotácie",
+          "type": "currency"
+        },
+        {
+          "tag": "druh",
+          "label": "Druh výdavku",
+          "type": "string"
+        },
+        {
+          "tag": "p_c",
+          "label": "Por. č.",
+          "type": "number"
+        }
+      ],
+      "rows": [
+        {
+          "c_dokladu": {
+            "tag": "c_dokladu",
+            "label": "Číslo účtovného dokladu",
+            "type": "string",
+            "value": "XLS-1",
+            "confidence": 0.8,
+            "evidence": "XLS-1",
+            "page": null,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": {
+              "sheet": "Doklad",
+              "cell": "A3",
+              "context_cells": [
+                "A2"
+              ]
+            }
+          },
+          "suma_doklad": {
+            "tag": "suma_doklad",
+            "label": "Suma na účt. doklade",
+            "type": "currency",
+            "value": 123.0,
+            "confidence": 0.8,
+            "evidence": "123",
+            "page": null,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": {
+              "sheet": "Doklad",
+              "cell": "B3",
+              "context_cells": [
+                "B2"
+              ]
+            }
+          },
+          "datum": {
+            "tag": "datum",
+            "label": "Dátum dodania/ služieb",
+            "type": "date",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "datum_1": {
+            "tag": "datum_1",
+            "label": "Dátum úhrady",
+            "type": "date",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "nazov_vydavku": {
+            "tag": "nazov_vydavku",
+            "label": "Názov výdavku",
+            "type": "string",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "uhrada": {
+            "tag": "uhrada",
+            "label": "Spôsob úhrady",
+            "type": "string",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "typ": {
+            "tag": "typ",
+            "label": "Typ účt. dokladu",
+            "type": "string",
+            "value": "FA",
+            "confidence": 0.8,
+            "evidence": "FAKTÚRA č. XLS-1",
+            "page": null,
+            "status": "verified",
+            "validation_reasons": [],
+            "source_locator": {
+              "sheet": "Doklad",
+              "cell": "A1",
+              "context_cells": []
+            }
+          },
+          "suma_dotacia": {
+            "tag": "suma_dotacia",
+            "label": "Suma z dotácie",
+            "type": "currency",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "druh": {
+            "tag": "druh",
+            "label": "Druh výdavku",
+            "type": "string",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          },
+          "p_c": {
+            "tag": "p_c",
+            "label": "Por. č.",
+            "type": "number",
+            "value": null,
+            "confidence": 0.0,
+            "evidence": null,
+            "page": null,
+            "status": "not_found",
+            "validation_reasons": [],
+            "source_locator": null
+          }
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    "dodávateľ: údaj sa v dodanom obsahu nenašiel alebo nebol overený.",
+    "dátum splatnosti: údaj sa v dodanom obsahu nenašiel alebo nebol overený.",
+    "dátum úhrady: údaj sa v dodanom obsahu nenašiel alebo nebol overený.",
+    "Výsledok je návrh. Pred použitím skontrolujte údaje a pôvodný dokument.",
+    "Povinné pole Dátum dodania/ služieb ostáva prázdne.",
+    "Povinné pole Dátum úhrady ostáva prázdne.",
+    "Povinné pole Názov výdavku ostáva prázdne.",
+    "Povinné pole Spôsob úhrady ostáva prázdne.",
+    "Pole Suma z dotácie musí doplniť alebo potvrdiť používateľ.",
+    "Pole Druh výdavku musí doplniť alebo potvrdiť používateľ.",
+    "Pole Por. č. musí doplniť alebo potvrdiť používateľ.",
+    "Pole Účtovný doklad musí doplniť alebo potvrdiť používateľ.",
+    "Pole Zakúpený tovar musí doplniť alebo potvrdiť používateľ."
+  ],
+  "requires_review": true,
+  "extracted_data": {
+    "document_type": "invoice",
+    "classification": {
+      "value": "invoice",
+      "status": "verified",
+      "evidence": {
+        "page": null,
+        "quote": "FAKTÚRA č. XLS-1",
+        "locator": {
+          "sheet": "Doklad",
+          "cell": "A1",
+          "context_cells": []
+        }
+      },
+      "confidence": 0.8,
+      "source_kind": "document",
+      "validation_reasons": [],
+      "currency": null
+    },
+    "fields": {
+      "invoice_number": {
+        "value": "XLS-1",
+        "status": "verified",
+        "evidence": {
+          "page": null,
+          "quote": "XLS-1",
+          "locator": {
+            "sheet": "Doklad",
+            "cell": "A3",
+            "context_cells": [
+              "A2"
+            ]
+          }
+        },
+        "confidence": 0.8,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "receipt_number": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "contract_number": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "supplier_name": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "supplier_ico": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "supplier_dic": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "supplier_vat_id": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "customer_name": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "customer_ico": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "customer_dic": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "customer_vat_id": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "issue_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "due_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "delivery_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "payment_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "total_net": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "total_vat": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "total_gross": {
+        "value": "123.00",
+        "status": "verified",
+        "evidence": {
+          "page": null,
+          "quote": "123",
+          "locator": {
+            "sheet": "Doklad",
+            "cell": "B3",
+            "context_cells": [
+              "B2"
+            ]
+          }
+        },
+        "confidence": 0.8,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": {
+          "value": "EUR",
+          "status": "verified",
+          "evidence": [
+            {
+              "page": null,
+              "quote": "EUR",
+              "locator": {
+                "sheet": "Doklad",
+                "cell": "C3",
+                "context_cells": []
+              }
+            }
+          ],
+          "reasons": []
+        }
+      },
+      "paid_amount": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "currency": {
+        "value": "EUR",
+        "status": "verified",
+        "evidence": {
+          "page": null,
+          "quote": "EUR",
+          "locator": {
+            "sheet": "Doklad",
+            "cell": "C3",
+            "context_cells": [
+              "C2"
+            ]
+          }
+        },
+        "confidence": 0.8,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "iban": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "payment_method": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "expense_description": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "contract_subject": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "contract_date": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "contract_amount": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "statement_period_start": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "statement_period_end": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "opening_balance": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      },
+      "closing_balance": {
+        "value": null,
+        "status": "not_found",
+        "evidence": null,
+        "confidence": 0.0,
+        "source_kind": "document",
+        "validation_reasons": [],
+        "currency": null
+      }
+    },
+    "line_items": [],
+    "transactions": []
+  },
+  "meta": {
+    "schema_version": "1.0",
+    "provider": "mock",
+    "model": "mock",
+    "request_id": "6d5d780b-5d2b-4738-958e-e2a3ef230655",
+    "duration_ms": 18.23,
+    "mapping_id": "bbsk_11824_default",
+    "schema_source": "configured"
+  }
+}

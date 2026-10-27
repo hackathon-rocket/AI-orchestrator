@@ -1,0 +1,28 @@
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "SECTION",
+      "tag": "doklad",
+      "name": "Doklad",
+      "children": [
+        {
+          "type": "SIMPLE_STRING",
+          "tag": "referencia",
+          "name": "Číslo faktúry",
+          "config": {
+            "is_readonly": 0
+          }
+        },
+        {
+          "type": "CURRENCY",
+          "tag": "celkom",
+          "name": "Suma s DPH",
+          "config": {
+            "is_readonly": 0
+          }
+        }
+      ]
+    }
+  ]
+}

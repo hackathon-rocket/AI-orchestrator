@@ -1,0 +1,27 @@
+{
+  "clean_invoice": {
+    "fields": {
+      "invoice_number": "FA-2026-001",
+      "supplier_ico": "12345679",
+      "total_gross": "1230.00",
+      "due_date": "2026-10-15",
+      "payment_date": null
+    },
+    "mapped": {
+      "rozpocet.zoznamuctovnychdokladov.c_dokladu": "FA-2026-001",
+      "rozpocet.zoznamuctovnychdokladov.suma_doklad": 1230.0,
+      "rozpocet.zoznamuctovnychdokladov.suma_dotacia": null,
+      "rozpocet.zoznamuctovnychdokladov.datum_1": null,
+      "rozpocet.zoznamuctovnychdokladov.typ": "FA"
+    }
+  },
+  "missing_due_date": {
+    "fields": {
+      "due_date": null,
+      "payment_date": null
+    },
+    "mapped": {
+      "rozpocet.zoznamuctovnychdokladov.datum_1": null
+    }
+  }
+}
