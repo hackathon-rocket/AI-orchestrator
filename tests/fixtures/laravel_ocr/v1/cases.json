@@ -1,0 +1,83 @@
+{
+  "provenance": "Synthetic normalized input contract fixtures. No authentic provider raw response is available.",
+  "cases": [
+    {
+      "name": "combined_text",
+      "request": "combined_text.request.json",
+      "expected": {
+        "language": "sk+en",
+        "document_type": "invoice",
+        "mapping_status": "mapped",
+        "total_gross": "1230.00",
+        "amount_page": null,
+        "amount_locator": null
+      }
+    },
+    {
+      "name": "numbered_pages",
+      "request": "numbered_pages.request.json",
+      "expected": {
+        "language": "sk+en",
+        "document_type": "invoice",
+        "mapping_status": "mapped",
+        "total_gross": "1230.00",
+        "amount_page": 7,
+        "amount_locator": null
+      }
+    },
+    {
+      "name": "blank_page_gap",
+      "request": "blank_page_gap.request.json",
+      "expected": {
+        "language": "sk+en",
+        "document_type": "invoice",
+        "mapping_status": "mapped",
+        "total_gross": "1230.00",
+        "amount_page": 9,
+        "amount_locator": null
+      }
+    },
+    {
+      "name": "mixed_sources",
+      "request": "mixed_sources.request.json",
+      "expected": {
+        "language": "sk+en",
+        "document_type": "invoice",
+        "mapping_status": "mapped",
+        "total_gross": "1230.00",
+        "amount_page": 3,
+        "amount_locator": null
+      }
+    },
+    {
+      "name": "sheet_only",
+      "request": "sheet_only.request.json",
+      "expected": {
+        "language": "sk+en",
+        "document_type": "invoice",
+        "mapping_status": "mapped",
+        "total_gross": "120.50",
+        "amount_page": null,
+        "amount_locator": {
+          "sheet": "Doklad",
+          "cell": "B10",
+          "context_cells": [
+            "A10"
+          ]
+        }
+      }
+    },
+    {
+      "name": "unknown_text",
+      "request": "unknown_text.request.json",
+      "expected": {
+        "language": "cs+en",
+        "document_type": "unknown",
+        "mapping_status": "unsupported_document_type",
+        "total_gross": null,
+        "amount_page": null,
+        "amount_locator": null
+      }
+    }
+  ]
+}

@@ -69,6 +69,16 @@ Example sheet-only content:
 
 Formula strings are never executed; formula cells are not direct value evidence. Coordinates, sheet names and original page indices are not renumbered. See [structured_excel.request.json](../tests/fixtures/contracts/v1/structured_excel.request.json) and its complete golden response. Its amount remains reviewable for missing currency; contract tests preserve that status rather than inventing EUR.
 
+### Laravel OCR compatibility fixtures
+
+The [Laravel integration guide](laravel-integration.md#ocr-input-adapter-contract-and-shared-fixtures) distinguishes verified storage fields from unverified provider raw data. [Shared synthetic requests](../tests/fixtures/laravel_ocr/v1/README.md) cover combined text, normalized original page IDs, blank-page gaps, mixed OCR/sheet sources, sheet-only input and meaningful unknown text, with fixed invalid cases for adapter conformance.
+
+The service accepts normalized AnalyzeRequest, not a Laravel Extraction record or a flat provider response. No authentic sanitized provider raw-response fixture is available here; these examples must not be described as the OCR provider's raw schema. They do not implement automatic raw-to-pages conversion.
+
+Language normalization is applied before extraction; page text is preserved rather than trimmed or truncated. All-blank OCR is invalid unless another source contains a value. Blank pages inside meaningful numbered input may be retained. Original positive page IDs and input order survive; one null/omitted ID means unpaginated input, never fabricated page 1. Existing Pydantic coercions remain (including coercible page IDs); adapters should send actual positive integers and reject booleans before assigning provenance.
+
+Configured resource ceilings and model ceilings are separate: the default 50 pages/10 sheets/150,000 total characters are below the hard 100 pages/20 sheets/200,000 characters per page. Oversize input is rejected, not silently clipped. HTTP byte limits apply before extraction. The mock fixture recognizer has an additional existing per-line Evidence-length limitation; the integration guide records it explicitly.
+
 ## 4. Form/schema resolution
 
 A non-null form requires `id` and `mapping_id` (same identifier rules as `document_id`). `schema` and `mapping` default to null.

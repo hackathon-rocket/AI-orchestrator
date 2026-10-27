@@ -1,0 +1,79 @@
+{
+  "document_id": "synthetic-ocr-sheet_only",
+  "content": {
+    "language": "slk+eng",
+    "pages": [],
+    "sheets": [
+      {
+        "name": "Doklad",
+        "rows": [
+          {
+            "row": 4,
+            "cells": [
+              {
+                "coordinate": "A4",
+                "value": "FAKTÚRA č. XLS-OCR-1"
+              }
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              {
+                "coordinate": "A10",
+                "value": "Suma spolu"
+              },
+              {
+                "coordinate": "B10",
+                "value": 120.5,
+                "header_cells": [
+                  "A10"
+                ]
+              }
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              {
+                "coordinate": "A12",
+                "value": "Mena"
+              },
+              {
+                "coordinate": "B12",
+                "value": "EUR",
+                "header_cells": [
+                  "A12"
+                ]
+              }
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              {
+                "coordinate": "A17",
+                "value": "Číslo faktúry"
+              },
+              {
+                "coordinate": "B17",
+                "value": "XLS-OCR-1",
+                "header_cells": [
+                  "A17"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "form": {
+    "id": "bbsk_11824",
+    "schema": null,
+    "mapping_id": "bbsk_11824_default"
+  },
+  "options": {
+    "include_unmapped": true
+  }
+}

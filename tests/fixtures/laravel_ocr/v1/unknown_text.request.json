@@ -1,0 +1,21 @@
+{
+  "document_id": "synthetic-ocr-unknown_text",
+  "content": {
+    "language": "ces+eng",
+    "pages": [
+      {
+        "page": null,
+        "text": "Toto je poznámka bez účtovných údajov."
+      }
+    ],
+    "sheets": []
+  },
+  "form": {
+    "id": "bbsk_11824",
+    "schema": null,
+    "mapping_id": "bbsk_11824_default"
+  },
+  "options": {
+    "include_unmapped": true
+  }
+}

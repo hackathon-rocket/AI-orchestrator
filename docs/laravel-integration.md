@@ -38,6 +38,66 @@ $proposal = $response->json();
 
 Use Laravel's stored `Extraction.raw` when verified page metadata is available. Otherwise send `Extraction.text` as one unpaginated page with `page:null`, so UI evidence does not claim an invented page. Do not assume the inspected OCR client decomposes pages; it stores the provider's raw JSON unchanged. Build and test the adapter against a real OCR export.
 
+## OCR input adapter contract and shared fixtures
+
+The following is an integration specification for the future Laravel adapter, not code already implemented in Laravel or a new Python OCR service. Use the [shared synthetic fixtures](../tests/fixtures/laravel_ocr/v1/README.md) and [case expectations](../tests/fixtures/laravel_ocr/v1/cases.json) in Laravel contract tests.
+
+### What the inspected Laravel implementation proves
+
+`OcrClient` uploads a file to `{OCR_API_URL}/ocr-upload`, with the observed default language hint `slk+eng`, and returns provider JSON. `ProcessDocumentOcr` saves:
+
+| Stored Extraction field | Observed assignment |
+|---|---|
+| engine | `ocr-api` |
+| language | `result['language'] ?? null` |
+| filename | Original filename |
+| source | `result['source'] ?? null` |
+| text | `result['text'] ?? ''` |
+| raw | Complete provider result |
+
+The job then marks the document `ocr_completed`. That state alone does not prove nonempty OCR, valid pagination, analysis success or human approval. No guaranteed raw-response page structure or verified page-by-page transformation was established. A `DocumentPage` model's existence does not prove that this job populates it.
+
+**Unresolved dependency:** no authentic sanitized OCR provider response fixture was found in this repository. Do not assume `raw.pages`, `page_number`, blocks or segments are actual provider fields. Obtain a sanitized real response and establish the provider's indexing semantics before implementing that branch. The storage fixture's `raw:null` is explicitly redacted synthetic data, not a description of the actual provider response.
+
+### Adapter decision procedure
+
+1. Choose an opaque document reference matching the service ID rules. Keep filename, source and raw in Laravel; these are not additional AnalyzeRequest/content fields.
+2. If independently verified page-level text and original positive page identifiers exist, construct normalized `pages` from that trusted representation. Preserve source IDs, gaps, blank pages and Unicode text. Do not renumber by array position or assume a vendor uses one-based indexing. The normalized page examples are synthetic API examples, not vendor raw exports.
+3. Otherwise use the known stored `Extraction.text` as one `{page:null,text:originalText}`. An omitted page is also unpaginated in the current API; explicit null is recommended. Never substitute page 1 for unavailable physical pagination.
+4. Reject absent/non-string/all-Unicode-whitespace OCR locally before dispatching AI. An empty text result can be stored with ocr_completed by the observed job, so this preflight is necessary. Do not silently trim, collapse whitespace, split arbitrary paragraphs into pages, or truncate text to make it fit. Test emptiness separately and retain the original string.
+5. Supply a validated stored language hint or the configured hint actually used for OCR. Stored null must not be forwarded as `content.language:null`. If omitted, the service defaults to sk; that default does not recover a missing mixed-language hint. `slk+eng` becomes sk+en, `ces+eng` becomes cs+en; duplicate hints are removed. Language never proves currency or type.
+6. Send separately prepared spreadsheet sources as sheets, preserving sheet/row/cell coordinates and header hints. Do not manufacture PDF pages for cells. Nonempty pages and sheets may coexist; all sources must belong to the same document analysis. A meaningful sheet can make otherwise blank OCR content acceptable.
+7. Respect both schema and configured resource limits. Reject or explicitly route oversize input to a separate, provenance-preserving workflow; never silently drop pages or trailing evidence. A multi-document register must be split upstream, not interpreted as one document merely to fit limits.
+
+The existing request models perform some Pydantic coercion: for example `page="3"` becomes 3 and `page=true` becomes 1. The API is not a strict-primitive validator. Laravel must supply actual JSON positive integers and reject booleans/string guesses in its adapter before assigning source page IDs. No input validation behavior is changed by these tests.
+
+### Shared fixtures and response checks
+
+The fixture directory contains six normalized requests, one synthetic/redacted known-field storage record, stable selected expectations and 17 invalid payloads. Combined-text and numbered-page invoice examples use the existing synthetic clean invoice. `numbered_pages` deliberately places the heading/dates on page 3, amounts on page 7 and invoice lines on page 11. `blank_page_gap` preserves a blank page 2 and evidence on page 9. `sheet_only` uses amount cell B10 without a PDF page. A mixed-source request proves that adding a sheet does not erase OCR page provenance. The non-financial text example remains unknown and unmapped.
+
+The service returns `completed` for accepted analyses, not confirmation of OCR quality. Retain original/null page references, source_locator, warning/reason arrays, mapping_status and configuration fingerprints. Wrong-page evidence remains rejected even when the same amount exists elsewhere in the supplied document. `requires_review` always stays true.
+
+All-empty/missing/non-string OCR, contradictory pagination and malformed language hints return the existing 422 invalid_request. Hard model page/sheet/length ceilings also return 422. Configured aggregate limits return 413 content_too_large, while the streamed byte limit returns 413 request_too_large before JSON/extraction. Errors do not echo OCR or credentials. Use the shared invalid cases for a PHP-side conformance test rather than parsing Slovak messages.
+
+### Limit distinctions and current helper limitations
+
+| Constraint | Current value | Rejection layer |
+|---|---|---|
+| Pages | Configured default 50; hard ceiling 100 | 413 / 422 |
+| Text per page | Hard ceiling 200,000 characters | 422 |
+| Total source text/cell/formula characters | Configured default 150,000 | 413 |
+| Sheets | Configured default 10; hard ceiling 20 | 413 / 422 |
+| Analysis HTTP body | Configured default 2,000,000 bytes | 413 |
+| Evidence quote | Maximum 4000 characters | Provider proposal schema |
+
+Unicode character limits and UTF-8 byte limits are different. A page allowed by its hard field ceiling can still exceed the smaller configured aggregate limit. Exact-boundary tests retain evidence at the end of a 200,000-character page under an explicitly raised aggregate limit; rejected oversized inputs never reach extraction.
+
+`scripts.analyze.from_ocr_export()` is an offline convenience for explicitly normalized pages/text exports. It is not a verified OCR provider adapter and currently does not carry an exported language hint through to Content (the default is sk). Do not use it as proof of live Laravel raw compatibility. The fixture-only mock also constructs Evidence for every nonblank line: a single line over 4000 characters can cause provider_invalid_output even when the input contract accepts the page. This is an existing mock limitation, not permission to truncate real OCR or a change to provider behavior. Real-provider handling requires an authorized evaluation.
+
+Run `uv run pytest tests/integration/test_laravel_ocr_compatibility.py -q --basetemp work/task4-ocr-target` for these shared cases. No OCR service, real model, storage/queue implementation or changes to Laravel are required by the Python tests.
+
+## Queue and persistence boundary
+
 Dispatch `AnalyzeDocument` after successful OCR persistence. Choose a job timeout above 110 seconds and queue visibility/retry-after longer than the job timeout. Retry a small bounded number of times only for retryable categories such as `busy`, `provider_rate_limited`, `provider_unavailable` and timeouts, with delay. Use the error code as well as HTTP status: `provider_configuration_error` is a permanent 503 until configuration is repaired. Do not retry bad auth, schema/input errors or invalid provider configuration automatically. Avoid an additional `Http::retry` loop stacked with job retries and the service's three-attempt maximum. For example, two job attempts can mean up to six model calls; budget accordingly. Persist results idempotently against document/version and mapping/version; Python is stateless.
 
 The analysis response also contains the server-computed `mapping_status`:
