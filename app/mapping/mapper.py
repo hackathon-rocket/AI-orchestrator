@@ -10,11 +10,19 @@ from app.validators.identifiers import normalize_iban
 
 
 def ui_field(target: FormField, fact: Fact) -> ExtractedField:
+    # Mapping has already filtered unsafe facts and normalized money to scale 2.
+    # Format that Decimal directly, without another rounding or float round-trip.
+    decimal_value = (
+        format(fact.value, "f")
+        if target.frontend_type == "currency" and isinstance(fact.value, Decimal)
+        else None
+    )
     return ExtractedField(
         tag=target.tag if target.table else target.path,
         label=target.label,
         type=target.frontend_type,
         value=float(fact.value) if isinstance(fact.value, Decimal) else fact.value,
+        decimal_value=decimal_value,
         confidence=fact.confidence,
         evidence=fact.evidence.quote if fact.evidence else None,
         page=fact.evidence.page if fact.evidence else None,

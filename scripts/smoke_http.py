@@ -85,6 +85,7 @@ def main():
             row = data["tables"][0]["rows"][0]
             assert row["c_dokladu"]["value"] == "FA-2026-001"
             assert row["suma_doklad"]["value"] == 1230
+            assert row["suma_doklad"]["decimal_value"] == "1230.00"
             assert row["suma_dotacia"]["value"] is None
             assert data["requires_review"] is True
             assert data["mapping_status"] == "mapped"
@@ -103,6 +104,7 @@ def main():
             )
             dynamic.raise_for_status()
             assert dynamic.json()["fields"][0]["value"] == "FA-2026-001"
+            assert dynamic.json()["fields"][0]["decimal_value"] is None
             assert dynamic.json()["mapping_status"] == "mapped"
             _write_json(out / "dynamic_response.json", dynamic.json())
             book = Workbook()
@@ -137,6 +139,7 @@ def main():
             )
             xlsx.raise_for_status()
             assert xlsx.json()["tables"][0]["rows"][0]["suma_doklad"]["value"] == 123
+            assert xlsx.json()["tables"][0]["rows"][0]["suma_doklad"]["decimal_value"] == "123.00"
             assert xlsx.json()["mapping_status"] == "mapped"
             _write_json(out / "xlsx_response.json", xlsx.json())
             print(

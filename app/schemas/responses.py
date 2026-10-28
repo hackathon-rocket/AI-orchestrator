@@ -16,6 +16,15 @@ class ExtractedField(Model):
     label: str
     type: FieldType
     value: str | float | None
+    decimal_value: str | None = Field(
+        default=None,
+        pattern=r"^-?(?:0|[1-9][0-9]*)\.[0-9]{2}$",
+        description=(
+            "Authoritative exact amount for accepted currency suggestions, "
+            "with two decimal digits; "
+            "null for missing values and non-currency fields. Legacy value is presentation-only."
+        ),
+    )
     confidence: float = Field(ge=0, le=1)
     evidence: str | None = None
     page: int | None = None

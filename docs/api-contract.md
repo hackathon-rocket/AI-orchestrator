@@ -134,7 +134,8 @@ Every mapped field and table cell has these properties:
 | `tag` | String: full target path for scalar fields, short child tag for table cells. |
 | `label` | String from the target schema. |
 | `type` | `string`, `number`, `currency`, `date`, `ico`, `dic`, `iban`. Select values use `string`. |
-| `value` | String, JSON number or null. Dates use ISO `YYYY-MM-DD`; no monetary serialization change is introduced here. |
+| `value` | Legacy string, JSON number or null. Currency numbers remain unchanged for compatibility/presentation; they are not authoritative for exact finance. Dates use ISO `YYYY-MM-DD`. |
+| `decimal_value` | Exact fixed-scale string for accepted currency suggestions, or null for missing/non-currency values. Financial persistence/arithmetic must use this instead of numeric value. |
 | `confidence` | Number in [0,1]; current validator caps proposals at 0.85, lower for review. It is a heuristic, not calibrated accuracy. |
 | `evidence` | Original quote string or null. |
 | `page` | Original page integer or null. Null for spreadsheet/unpaginated sources is legitimate. |
@@ -144,13 +145,44 @@ Every mapped field and table cell has these properties:
 
 ExtractedTable: `tag` (full table path), `label`, `columns`, `rows`. TableColumn: `tag`, `label`, `type`. Each row is an object mapping child tags to full ExtractedField cells, including their statuses/evidence. A returned table may have no proposed rows if all cell values are absent. Clients should address fields/columns by tags rather than depend on object-key order.
 
-The original seven frontend field properties remain available. Laravel/React can retain or display additive status/reason/locator fields. Missing or protected values never become fabricated suggestions.
+The original seven frontend field properties remain available. Laravel/React can retain or display additive status/reason/locator fields and must accept the nullable decimal_value extension. Missing or protected values never become fabricated suggestions.
+
+### Exact mapped currency values
+
+`decimal_value` is an intentional additive API v1 property of **ExtractedField**, shared by scalar `fields[]` and table cells in `tables[].rows[]`. Every serialized field/cell includes it: null is retained for non-currency or missing values. TableColumn definitions and rich Fact objects do not gain this property.
+
+The mapping pipeline first applies its existing safety, semantic, currency, select and financial checks and normalizes accepted monetary values with `parse_money()`. Before the legacy float conversion, `ui_field()` formats that validated scale-2 Decimal directly in fixed-point notation. There is no float round-trip, new quantization/rounding, reconstruction from response JSON, or recovery from rejected extracted data.
+
+| Accepted Decimal | Legacy value (JSON number) | Authoritative decimal_value (JSON string) |
+|---|---|---|
+| 1230.00 | 1230.0 | `"1230.00"` |
+| 0.10 | 0.1 | `"0.10"` |
+| 0.00 | 0.0 | `"0.00"` |
+| -125.50 | -125.5 | `"-125.50"` |
+| 999999999999.99 | 999999999999.99 | `"999999999999.99"` |
+| Missing/rejected | null | null |
+
+The canonical string uses a period and exactly two fractional digits, with no grouping, currency symbol or exponent. The existing absolute amount limit (10^12), finite-number check and maximum two-decimal precision remain enforced by parse_money; no new amounts or precision are accepted. Negative zero preserves the validated Decimal's sign as `"-0.00"`; legacy value remains -0.0 and arithmetic equality to zero is unchanged.
+
+Only `type="currency"` receives an authoritative string. `number` (including standard numeric fields), string, date, ico, dic and iban use null, even if an internal value happens to be Decimal. A currency code such as EUR is not an amount. Rejected/unsafe amounts, currency mismatches and missing sources yield both value=null and decimal_value=null. Protected destinations remain omitted as before. A safe review suggestion retains its existing status and evidence; an exact string does not upgrade it to verified or confirmed.
+
+Examples:
+
+```json
+{"tag":"suma_doklad","type":"currency","value":1230.0,"decimal_value":"1230.00","status":"verified"}
+```
+
+```json
+{"tag":"suma_doklad","type":"currency","value":null,"decimal_value":null,"status":"not_found"}
+```
+
+These are abbreviated cell examples, not replacement envelopes. `include_unmapped=false` still returns decimal_value on mapped suggestions while extracted_data stays null. mapping_status, warnings, provenance, configuration fingerprints, legacy values and schema_version remain unchanged. Existing consumers may ignore the additive property; strict schemas/generated clients must explicitly accept its nullable string type. Existing legacy results without this property do not acquire exactness by converting their numeric value back to string.
 
 ## 7. Evidence, verification and missing values
 
 When `include_unmapped=true` (default), `extracted_data` contains `document_type`, `classification`, fixed universal `fields`, `line_items`, and bank `transactions`.
 
-Each Fact has `value`, `status`, `evidence`, `confidence`, `source_kind`, `validation_reasons`, `currency`. `source_kind` is normally `document`; calculated proposals are not accepted as direct evidence. Numeric Decimal facts serialize as strings in this richer representation (e.g. `"1230.00"`), while mapped monetary values are JSON numbers. This existing difference is intentional and protected by fixtures. Clients must not apply binary floating point when recomputing financial validation.
+Each Fact has `value`, `status`, `evidence`, `confidence`, `source_kind`, `validation_reasons`, `currency`. `source_kind` is normally `document`; calculated proposals are not accepted as direct evidence. Numeric Decimal facts serialize as strings in this richer representation (e.g. `"1230.00"`). That behavior is unchanged and Fact has no redundant decimal_value. Mapped currency values retain the legacy JSON-number value and additionally provide the authoritative decimal_value string. Both representations are protected by fixtures. Clients must not apply binary floating point when recomputing financial validation.
 
 Evidence is `{"page":3,"quote":"...","locator":null}` or spreadsheet evidence such as `{"page":null,"quote":"120.5","locator":{"sheet":"Doklad","cell":"B2","context_cells":["A2"]}}`. A numbered page and cell locator cannot coexist. Context cells must exist, be non-formula and satisfy deterministic geometry/semantic checks. A literal number alone never establishes its role as a document total.
 
@@ -273,7 +305,7 @@ The deterministic fixture [prepare_xlsx.input.json](../tests/fixtures/contracts/
 
 Contract tests protect the paths/methods, request/response references, required fields, types, nullability, enum values, defaults, constraints, extra-property policy and security declarations. Editorial OpenAPI descriptions, examples, titles, summaries and operation IDs are excluded from the structural fixture. A property name is never excluded merely because it matches an editorial keyword.
 
-API paths stay `/v1/...`; metadata stays schema version `1.0`. `mapping_status` is an additive required response field; previous properties, routes, authentication, value serialization, validation and mapping rules retain their behavior. Clients that ignore unknown JSON properties remain compatible. Strict response validators or generated clients must add this four-value enum. No request field is added. The nullable metadata properties `mapping_version`, `mapping_fingerprint`, `form_schema_fingerprint`, and `authoritative_constraints_fingerprint` are also additive; strict client schemas must accept them. Existing metadata names and schema_version remain unchanged. Contract fixtures are reviewed expectations, not permission for silent breaking changes. Future changes require explicit compatibility review of existing consumers and appropriate versioning; this task adds no version negotiation mechanism.
+API paths stay `/v1/...`; metadata stays schema version `1.0`. `mapping_status` is an additive required response field; previous properties, routes, authentication, value serialization, validation and mapping rules retain their behavior. Clients that ignore unknown JSON properties remain compatible. Strict response validators or generated clients must add this four-value enum. No request field is added. ExtractedField.decimal_value is an additive nullable response property for exact mapped currency values; legacy value remains unchanged. The nullable metadata properties `mapping_version`, `mapping_fingerprint`, `form_schema_fingerprint`, and `authoritative_constraints_fingerprint` are also additive; strict client schemas must accept them. Existing metadata names and schema_version remain unchanged. Contract fixtures are reviewed expectations, not permission for silent breaking changes. Future changes require explicit compatibility review of existing consumers and appropriate versioning; this task adds no version negotiation mechanism.
 
 ## 13. Contract fixtures and tests
 
@@ -298,7 +330,7 @@ Existing extraction/security/Excel/classification/money tests remain in force; t
 
 - HTTP 200 and `completed` describe execution. Use `mapping_status` to distinguish mapping outcomes; inspect cells/warnings to assess completeness and verification.
 - BBSK invoice mapping does not implement receipt or contract mapping. Unknown/unsupported types must remain unmapped.
-- Rich Fact Decimal strings and mapped JSON numbers differ; consumers must preserve financial precision and nulls.
+- Legacy mapped value is still a JSON number and may lose decimal precision in consumers. Use currency decimal_value for exact persistence/arithmetic and preserve null as missing data. Rich Fact.value remains unchanged.
 - A null page means unpaginated/spreadsheet evidence, not page 1. `extracted_data=null` means omitted by option, not failed extraction.
 - Warnings are human-facing Slovak messages, with selected diagnostic codes; they are not a complete machine-readable workflow state model.
 - Readiness is configuration-only and uses a different failure envelope. XLSX preparation may work while analysis is not ready.

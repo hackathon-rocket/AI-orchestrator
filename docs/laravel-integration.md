@@ -146,6 +146,24 @@ return [
 
 Keep `extracted_data`, `meta`, source OCR and schema/version references in restricted audit storage if appropriate. The service does not supply user consent or evidence that the user reviewed anything. Confirmation must reauthorize document/form access and validate edited values against the current form in Laravel. No confirmation endpoint or eGrant writer is present here.
 
+## Exact financial values in mapped proposals
+
+Mapped ExtractedField objects, including table cells, now contain nullable `decimal_value`. For `type="currency"`, this is the authoritative exact financial representation when a value has passed mapping safety checks. The existing numeric `value` is retained for compatibility and UI presentation; PHP float and JavaScript Number do not guarantee exact decimal arithmetic.
+
+For BBSK, `tables[].rows[].suma_doklad` retains value=1230.0 and additionally carries decimal_value="1230.00". Scalar currency destinations behave identically. The exact string comes directly from the validated Decimal before float conversion, using a period and exactly two fractional digits, without grouping/symbols/scientific notation. Negative zero is preserved as "-0.00" without changing its arithmetic equality to zero.
+
+Laravel should:
+
+1. Persist mapped currency proposals from decimal_value using exact decimal-capable handling or appropriate fixed-scale database storage.
+2. Keep the string exact; do not cast it to PHP float or use JavaScript Number for financial calculations.
+3. Preserve null as missing/rejected, never substitute "0.00". Numeric zero is valid only when already supported by source/validation.
+4. Continue server-side validation and authorization of human-confirmed amounts. Exact serialization does not prove eligibility, payment, or user consent.
+5. Accept the new nullable field in strict response schemas. Old display clients may continue reading value, but it is not an authoritative financial source.
+
+No PHP, database or frontend code is implemented here. Historical responses without an exact field require a trusted exact source/reanalysis policy upstream; formatting their old float as text cannot recover precision.
+
+For non-currency fields (including `number`, dates, IDs and descriptions), decimal_value is null. Missing or unsafe currency suggestions, currency mismatches, conflicts and invalid precision also yield null exact values; there is no fallback from the rejected raw Fact. Rich `extracted_data.fields.*.value` retains its existing Decimal-string serialization and has no decimal_value property. `include_unmapped=false` leaves exact mapped values available even though extracted_data is null. Existing statuses, warnings, source locators, fingerprints, legacy values and requires_review are unchanged.
+
 ## Optional OCR container
 
 The supplied specification names this image; it was not executed as part of offline service tests:

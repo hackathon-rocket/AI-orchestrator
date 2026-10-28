@@ -696,6 +696,17 @@
                 "type": "null"
               }
             ]
+          },
+          "decimal_value": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^-?(?:0|[1-9][0-9]*)\\.[0-9]{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,

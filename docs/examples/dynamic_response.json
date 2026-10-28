@@ -9,6 +9,7 @@
       "label": "Číslo dokladu",
       "type": "string",
       "value": "FA-2026-001",
+      "decimal_value": null,
       "confidence": 0.8,
       "evidence": "FAKTÚRA č. FA-2026-001",
       "page": 3,
